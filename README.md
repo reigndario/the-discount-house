@@ -148,3 +148,7 @@ or gateway decryption must be validated on Sepolia before public demonstration.
 
 The dependency tree currently includes npm audit findings inherited from the upstream template and ecosystem packages.
 They are tracked as launch blockers until resolved, upgraded, or explicitly risk-accepted.
+
+## Validation
+
+Does this work? Yes! Borrower trace on BlockScout: https://eth-sepolia.blockscout.com/address/0x5A57034b97253a4d205698B685DB78a9Ca9C5ef1?tab=txs 
