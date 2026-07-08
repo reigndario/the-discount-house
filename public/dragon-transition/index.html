@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Zahak Interface Mockup</title>
+    <script>
+      window.ZAHAK_BUILD_ID = "20260706-package-v1";
+      window.ZAHAK_CACHE_FLAG = `${window.ZAHAK_BUILD_ID}-${Date.now().toString(36)}`;
+
+      const stylesheet = document.createElement("link");
+      stylesheet.rel = "stylesheet";
+      stylesheet.href = `styles.css?v=${encodeURIComponent(window.ZAHAK_CACHE_FLAG)}`;
+      document.head.appendChild(stylesheet);
+    </script>
+  </head>
+  <body class="zahak-demo-page" data-vibe="mixed">
+    <canvas id="ambient-bg" data-zahak-ambient-canvas aria-hidden="true"></canvas>
+
+    <div id="vibe-switch" class="vibe-switch" data-zahak-vibe-switch role="button" tabindex="0" aria-label="Change dragon palette">
+      <span class="vibe-switch__frame" data-zahak-vibe-frame>
+        <canvas id="zahak-bg" data-zahak-scene-canvas aria-hidden="true"></canvas>
+      </span>
+    </div>
+
+    <main class="app-shell" data-zahak-demo-shell>
+      <header class="site-bar horn-panel">
+        <div>
+          <p class="eyebrow">Aegis Console</p>
+          <h1>Lorem Ipsum Operations</h1>
+        </div>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="#overview">Overview</a>
+          <a href="#records">Records</a>
+          <a href="#access">Access</a>
+        </nav>
+      </header>
+
+      <section id="overview" class="layout-grid">
+        <article class="panel panel--wide horn-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Mixed Palette</p>
+              <h2>Praesent commodo cursus magna</h2>
+            </div>
+            <button id="privateAction" class="private-action" data-zahak-private-action type="button">PRIVATE ACTION</button>
+          </div>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante
+            venenatis dapibus posuere velit aliquet. Donec ullamcorper nulla non metus auctor
+            fringilla.
+          </p>
+          <div class="metrics-row">
+            <div>
+              <span>Flux</span>
+              <strong>84%</strong>
+            </div>
+            <div>
+              <span>Drift</span>
+              <strong>12.6</strong>
+            </div>
+            <div>
+              <span>Signal</span>
+              <strong>Stable</strong>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel horn-panel">
+          <p class="eyebrow">Controls</p>
+          <h2>Morbi leo risus</h2>
+          <div class="control-stack">
+            <label>
+              Query
+              <input type="search" value="lorem ipsum">
+            </label>
+            <label>
+              Mode
+              <select>
+                <option>Mixed</option>
+                <option>Blue</option>
+                <option>Red</option>
+              </select>
+            </label>
+            <label class="range-row">
+              Intensity
+              <input type="range" min="0" max="100" value="62">
+            </label>
+          </div>
+        </article>
+      </section>
+
+      <section id="records" class="card-grid">
+        <article class="panel horn-panel">
+          <p class="eyebrow">Blue Variant</p>
+          <h2>Nullam id dolor</h2>
+          <p>
+            Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed
+            consectetur.
+          </p>
+        </article>
+        <article class="panel horn-panel">
+          <p class="eyebrow">Red Variant</p>
+          <h2>Vestibulum porta</h2>
+          <p>
+            Maecenas faucibus mollis interdum. Etiam porta sem malesuada magna mollis euismod.
+          </p>
+        </article>
+        <article class="panel horn-panel">
+          <p class="eyebrow">Mixed Variant</p>
+          <h2>Etiam porta sem</h2>
+          <p>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem.
+          </p>
+        </article>
+      </section>
+
+      <section id="access" class="panel horn-panel operations-panel">
+        <div>
+          <p class="eyebrow">Access</p>
+          <h2>Donec sed odio dui</h2>
+          <p>
+            Sed posuere consectetur est at lobortis. Curabitur blandit tempus porttitor. Fusce
+            dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.
+          </p>
+        </div>
+        <div class="switch-list">
+          <label><input type="checkbox" checked> Vestibulum</label>
+          <label><input type="checkbox"> Sollicitudin</label>
+          <label><input type="checkbox" checked> Pellentesque</label>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const scriptUrl = `script.js?v=${encodeURIComponent(window.ZAHAK_CACHE_FLAG)}`;
+
+      function appendScript(src) {
+        const script = document.createElement("script");
+        script.src = src;
+        script.dataset.zahakBuildId = window.ZAHAK_BUILD_ID;
+        document.body.appendChild(script);
+      }
+
+      fetch(scriptUrl, { cache: "no-store", credentials: "same-origin" })
+        .then((response) => {
+          if (!response.ok) throw new Error(`script load failed: ${response.status}`);
+          return response.text();
+        })
+        .then((source) => {
+          const blob = new Blob([
+            source,
+            `\n//# sourceURL=${new URL(scriptUrl, window.location.href).href}\n`,
+          ], { type: "text/javascript" });
+          const objectUrl = URL.createObjectURL(blob);
+          const script = document.createElement("script");
+          script.src = objectUrl;
+          script.dataset.zahakBuildId = window.ZAHAK_BUILD_ID;
+          script.addEventListener("load", () => URL.revokeObjectURL(objectUrl), { once: true });
+          document.body.appendChild(script);
+        })
+        .catch(() => appendScript(scriptUrl));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Confidential Vesting Credit Docs</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      .docs-shell {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 42px 0;
+      }
+
+      .docs-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        align-items: flex-start;
+        margin-bottom: 22px;
+      }
+
+      .docs-head p {
+        max-width: 760px;
+        margin-top: 12px;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+
+      .docs-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .doc-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .doc-link {
+        display: flex;
+        justify-content: space-between;
+        gap: 14px;
+        align-items: center;
+        min-height: 54px;
+        padding: 12px 14px;
+        color: var(--text);
+        text-decoration: none;
+        background: var(--panel-strong);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+
+      .doc-link:hover {
+        border-color: color-mix(in srgb, var(--accent) 60%, var(--line));
+      }
+
+      .doc-link span {
+        color: var(--muted);
+        font-size: 0.78rem;
+      }
+
+      @media (max-width: 820px) {
+        .docs-head,
+        .docs-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .docs-head {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="docs-shell">
+      <header class="docs-head">
+        <div>
+          <div class="eyebrow">Project Documentation</div>
+          <h2>Confidential Vesting Credit Docs</h2>
+          <p>
+            Original architecture dossier plus project documentation created during implementation. Markdown files are
+            hosted directly so they can be inspected, downloaded, or reviewed without lossy conversion.
+          </p>
+        </div>
+        <a class="doc-link" href="../">Return to App <span>Public UI</span></a>
+      </header>
+
+      <section class="docs-grid">
+        <article class="panel">
+          <div class="panel-head">
+            <h3>Original Dossier</h3>
+            <span class="badge borrower">Source package</span>
+          </div>
+          <div class="doc-list">
+            <a class="doc-link" href="./original/00_README.md">00_README.md <span>Package map</span></a>
+            <a class="doc-link" href="./original/01_PRD.md">01_PRD.md <span>Product requirements</span></a>
+            <a class="doc-link" href="./original/02_ADR.md">02_ADR.md <span>Architecture decisions</span></a>
+            <a class="doc-link" href="./original/03_SYSTEM_ARCHITECTURE.md"
+              >03_SYSTEM_ARCHITECTURE.md <span>Components</span></a
+            >
+            <a class="doc-link" href="./original/04_PROTOCOL_SPEC.md"
+              >04_PROTOCOL_SPEC.md <span>Protocol mechanics</span></a
+            >
+            <a class="doc-link" href="./original/05_SECURITY_THREAT_MODEL.md"
+              >05_SECURITY_THREAT_MODEL.md <span>Security model</span></a
+            >
+            <a class="doc-link" href="./original/06_CODEX_IMPLEMENTATION_PLAN.md"
+              >06_CODEX_IMPLEMENTATION_PLAN.md <span>Milestones</span></a
+            >
+            <a class="doc-link" href="./original/07_MARKETING_POSITIONING_APPENDIX.md"
+              >07_MARKETING_POSITIONING_APPENDIX.md <span>Positioning</span></a
+            >
+            <a class="doc-link" href="./original/08_IDENTITY_PRIVACY_RESPEC.md"
+              >08_IDENTITY_PRIVACY_RESPEC.md <span>Phase 1 identity respec</span></a
+            >
+            <a class="doc-link" href="./original/09_CODEX_DELTA_RESPEC.md"
+              >09_CODEX_DELTA_RESPEC.md <span>Required Codex changes</span></a
+            >
+            <a class="doc-link" href="./original/10_PREFERENCE_BUILDER_UX_SPEC.md"
+              >10_PREFERENCE_BUILDER_UX_SPEC.md <span>Builder UX model</span></a
+            >
+            <a class="doc-link" href="./original/10_PREFERENCE_BUILDER_UX_ANNOTATED.png"
+              >10_PREFERENCE_BUILDER_UX_ANNOTATED.png <span>Annotated mockup</span></a
+            >
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <h3>Project Docs</h3>
+            <span class="badge lender">Generated</span>
+          </div>
+          <div class="doc-list">
+            <a class="doc-link" href="./project/README.md">README.md <span>Current repo guide</span></a>
+            <a class="doc-link" href="./project/ARCHITECTURE.md"
+              >ARCHITECTURE.md <span>Implementation architecture</span></a
+            >
+            <a class="doc-link" href="./project/INTEGRATION_RISKS.md"
+              >INTEGRATION_RISKS.md <span>Zama/OZ/TokenOps risks</span></a
+            >
+            <a class="doc-link" href="./project/LIVE_MATCH_ORCHESTRATION.md"
+              >LIVE_MATCH_ORCHESTRATION.md <span>Live match transaction order</span></a
+            >
+            <a class="doc-link" href="./project/PHASE_1_RESPEC_PLAN.md"
+              >PHASE_1_RESPEC_PLAN.md <span>Updated implementation plan</span></a
+            >
+            <a class="doc-link" href="./project/PRE_TESTNET_RUNBOOK.md"
+              >PRE_TESTNET_RUNBOOK.md <span>Local and Sepolia prep</span></a
+            >
+            <a class="doc-link" href="./project/SEPOLIA_MOCKS_AND_STUBS_REPORT.md"
+              >SEPOLIA_MOCKS_AND_STUBS_REPORT.md <span>Current deployment gaps</span></a
+            >
+            <a class="doc-link" href="./project/PROJECT_CLARIFICATIONS.md"
+              >PROJECT_CLARIFICATIONS.md <span>Interview answers</span></a
+            >
+          </div>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

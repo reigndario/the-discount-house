@@ -1,0 +1,27 @@
+# fhevm
+fhevmTemp
+
+# directories
+.coverage_artifacts
+.coverage_cache
+.coverage_contracts
+artifacts
+build
+cache
+coverage
+dist
+node_modules
+public/vendor
+types
+public/docs/original
+
+# files
+*.env
+*.log
+.DS_Store
+.pnp.*
+bun.lockb
+coverage.json
+package-lock.json
+pnpm-lock.yaml
+yarn.lock

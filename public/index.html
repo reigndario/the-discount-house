@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Confidential Vesting Credit</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/logo/favicon-32.png?v=20260707-keyhole-logo-1" />
+    <link rel="icon" type="image/png" sizes="64x64" href="./assets/logo/favicon-64.png?v=20260707-keyhole-logo-1" />
+    <link rel="apple-touch-icon" href="./assets/logo/apple-touch-icon.png?v=20260707-keyhole-logo-1" />
+    <link rel="stylesheet" href="./dragon-transition/styles.css?v=20260707-onboarding-blast-1" />
+    <link rel="stylesheet" href="./styles.css?v=20260708-zahak-brand-1" />
+  </head>
+  <body>
+    <canvas id="ambient-bg" data-zahak-ambient-canvas aria-hidden="true"></canvas>
+    <div
+      id="vibe-switch"
+      class="vibe-switch"
+      data-zahak-vibe-switch
+      role="button"
+      tabindex="0"
+      aria-label="Dragon role switch"
+    >
+      <span class="vibe-switch__frame" data-zahak-vibe-frame>
+        <canvas id="zahak-bg" data-zahak-scene-canvas aria-hidden="true"></canvas>
+      </span>
+    </div>
+    <div class="app-shell" data-mode="combined">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">
+            <img src="./assets/logo/cvc-keyhole-logo-512.png?v=20260707-keyhole-logo-1" alt="" />
+          </div>
+          <div>
+            <h1>ZAHAK</h1>
+            <p>Confidentally Borrow and Lend against Vesting tokens</p>
+          </div>
+        </div>
+
+        <nav class="nav" aria-label="Workspace">
+          <button class="nav-item active" data-view="book">Book</button>
+          <button class="nav-item" data-view="builder">Builder</button>
+          <button class="nav-item" data-view="loans">Loans</button>
+          <button class="nav-item" data-view="demo-utils">Demo Utils</button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <span>Confidential terms and settlement</span>
+          <span>No Phase 1 anonymity claim</span>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <div class="eyebrow">Zama fhEVM • ERC-7984 • TokenOps Vesting</div>
+            <h2 id="view-title">Confidential Preference Book</h2>
+          </div>
+          <div class="mode-chip" id="mode-chip">
+            <span>Local Demo</span>
+            <strong>Combined Book</strong>
+          </div>
+          <div class="actions">
+            <div class="wallet-cluster" aria-label="Wallet connection">
+              <button id="app-help" class="app-help-button" type="button">HELP</button>
+              <button id="topbar-connect-wallet" type="button">Connect Wallet</button>
+            </div>
+          </div>
+        </header>
+
+        <section class="view active" id="view-book" data-title="Confidential Preference Book">
+          <div class="metrics">
+            <article>
+              <span>Preference Bundles</span>
+              <strong id="metric-bundles">0</strong>
+            </article>
+            <article>
+              <span>Open Buckets</span>
+              <strong id="metric-buckets">0</strong>
+            </article>
+            <article>
+              <span>Borrower Buckets</span>
+              <strong id="metric-borrower-buckets">0</strong>
+            </article>
+            <article>
+              <span>Lender Buckets</span>
+              <strong id="metric-lender-buckets">0</strong>
+            </article>
+          </div>
+
+          <div class="book-grid">
+            <div class="panel">
+              <div class="panel-head">
+                <div>
+                  <h3>Your Executable Offers</h3>
+                  <p class="supporting">Completely published bundles owned by the connected wallet.</p>
+                </div>
+              </div>
+              <div id="user-executable-list" class="offer-list"></div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head">
+                <h3>Coarse Discovery Buckets</h3>
+                <select id="bucket-side-filter">
+                  <option value="all">All sides</option>
+                  <option value="borrower">Borrower demand</option>
+                  <option value="lender">Lender supply</option>
+                </select>
+              </div>
+              <div id="bucket-list" class="bucket-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-builder" data-title="Preference Builder">
+          <div class="builder-concept">
+            <div class="builder-grid">
+              <section class="builder-pane bundle-pane">
+                <div class="panel-head">
+                  <div>
+                    <h3>Preference Bundles <span>(ranked)</span></h3>
+                    <p class="supporting">Higher regions dominate small preference differences inside lower regions.</p>
+                  </div>
+                  <div class="order-actions">
+                    <span id="order-save-status" class="save-status compact unsaved">Local order not saved</span>
+                    <button
+                      id="save-ordering"
+                      class="ghost"
+                      type="button"
+                      title="Browser-local only; bundle order is intentionally not published onchain"
+                    >
+                      Save Local Order
+                    </button>
+                    <button id="add-bundle" class="ghost" type="button">+ Add Bundle</button>
+                  </div>
+                </div>
+                <div id="bundle-list" class="bundle-list"></div>
+              </section>
+
+              <section class="builder-pane builder-main">
+                <div class="panel-head builder-editor-head">
+                  <label class="bundle-label-field">
+                    Bundle label
+                    <input id="active-bundle-title" type="text" value="Bundle" autocomplete="off" />
+                  </label>
+                  <div class="save-cluster">
+                    <span id="active-save-status" class="save-status unsaved">Not saved</span>
+                    <button id="save-preferences" class="save-preferences" type="button">Publish Private Offer</button>
+                  </div>
+                </div>
+
+                <div id="builder-capital-gate" class="capital-gate"></div>
+
+                <div class="collateral-selector">
+                  <label>
+                    Collateral asset
+                    <select id="collateral-asset-select"></select>
+                  </label>
+                  <div>
+                    <span>Collateral market</span>
+                    <strong id="collateral-asset-address">Manifest collateral</strong>
+                  </div>
+                </div>
+
+                <div class="projection-card">
+                  <div class="projection-wrap">
+                    <canvas
+                      id="utility-chart"
+                      width="720"
+                      height="360"
+                      aria-label="Preference weighting polygon control"
+                    ></canvas>
+                  </div>
+                </div>
+
+                <div class="builder-section-title">
+                  <h4>Define This Bundle</h4>
+                  <span>Hard constraints per field</span>
+                </div>
+                <div id="field-controls" class="field-controls"></div>
+
+                <div class="builder-tip">
+                  The solver tests exact term packages inside each acceptable region. Implied price is derived from the
+                  selected principal and collateral ranges.
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="view-loans" data-title="Loan Escrows">
+          <div class="privacy-banner">
+            <strong id="loan-role-title">Borrower execution surface</strong>
+            <span id="loan-role-copy">
+              Select one of your borrower bundles and a live lender supply bucket. Execution uses public bucket metadata
+              and keeps exact terms encrypted.
+            </span>
+          </div>
+
+          <div class="metrics loan-metrics">
+            <article>
+              <span>Created</span>
+              <strong id="metric-loans">0</strong>
+            </article>
+            <article>
+              <span>Awaiting Escrow</span>
+              <strong id="metric-awaiting">0</strong>
+            </article>
+            <article>
+              <span>Active</span>
+              <strong id="metric-active-loans">0</strong>
+            </article>
+            <article>
+              <span>Closed</span>
+              <strong id="metric-closed-loans">0</strong>
+            </article>
+          </div>
+
+          <section class="panel execution-panel">
+            <div class="panel-head">
+              <div>
+                <h3 id="execution-panel-title">Execute Borrower Bundle</h3>
+                <p class="supporting" id="execution-panel-copy">
+                  Choose a borrower bundle and an opposite-side public bucket.
+                </p>
+              </div>
+              <span id="execution-status" class="save-status unsaved">Execution disabled</span>
+            </div>
+            <div class="execution-grid">
+              <label>
+                Your bundle
+                <select id="execution-bundle"></select>
+              </label>
+              <label>
+                Target bucket
+                <select id="execution-bucket"></select>
+              </label>
+              <button id="execute-bundle" type="button" disabled>Execute Against Bucket</button>
+            </div>
+            <div id="execution-summary" class="execution-summary"></div>
+          </section>
+
+          <div class="loan-workspace">
+            <section class="panel">
+              <div class="panel-head">
+                <h3>Escrows</h3>
+              </div>
+              <p class="supporting">
+                Escrows are created by successful contract settlement. Exact economics are shown only when retained in
+                this browser's local cache.
+              </p>
+              <div id="loan-list" class="loan-list"></div>
+            </section>
+
+            <aside class="panel">
+              <h3>Selected Escrow</h3>
+              <div id="loan-detail" class="empty-state">Create or select a loan escrow.</div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="view-demo-utils" data-title="Demo Utilities">
+          <div class="demo-utils-grid">
+            <article class="panel demo-util-card demo-flow-card" data-demo-role="borrower">
+              <div class="panel-head">
+                <div>
+                  <h3>Borrower Capital</h3>
+                  <p class="supporting">
+                    Create demo vesting collateral and move it into adapter custody before building a private offer.
+                  </p>
+                </div>
+                <span id="demo-borrower-status" class="save-status unsaved">Ready check</span>
+              </div>
+              <div id="demo-borrower-steps" class="contract-stepper prep-stepper"></div>
+              <div class="demo-prep-summary" id="demo-borrower-summary"></div>
+              <div class="demo-capital-control">
+                <label>
+                  Collateral token name
+                  <input
+                    id="demo-borrower-token-name"
+                    type="text"
+                    maxlength="42"
+                    autocomplete="off"
+                    placeholder="Demo Vested Collateral"
+                  />
+                </label>
+                <label>
+                  Tokens to custody
+                  <input id="demo-borrower-vesting-amount" type="number" min="1" step="1" inputmode="numeric" />
+                </label>
+                <input id="demo-borrower-vesting-slider" type="range" min="1" max="500000" step="1" />
+              </div>
+              <div class="demo-capital-picker" id="demo-borrower-capital-picker" hidden>
+                <label>
+                  Custodied position
+                  <select id="demo-borrower-capital-select"></select>
+                </label>
+                <span id="demo-borrower-capital-detail">No positions</span>
+              </div>
+              <div class="demo-form-row two-actions">
+                <button id="demo-prepare-borrower" type="button">Onboard Collateral</button>
+                <button id="demo-prepare-borrower-new" class="ghost" type="button">Onboard New Token</button>
+              </div>
+              <dl class="demo-address-list">
+                <div>
+                  <dt>Collateral token</dt>
+                  <dd id="demo-latest-token">None</dd>
+                </div>
+                <div>
+                  <dt>Vesting manager</dt>
+                  <dd id="demo-latest-manager">None</dd>
+                </div>
+                <div>
+                  <dt>Vesting ID</dt>
+                  <dd id="demo-last-vesting-id">None</dd>
+                </div>
+                <div>
+                  <dt>Latest custody</dt>
+                  <dd id="demo-borrower-backing-id">None</dd>
+                </div>
+              </dl>
+            </article>
+
+            <article class="panel demo-util-card demo-flow-card" data-demo-role="lender">
+              <div class="panel-head">
+                <div>
+                  <h3>Lender Capital</h3>
+                  <p class="supporting">
+                    Escrow shielded cUSDC as a one-shot commitment before building a private lender offer.
+                  </p>
+                </div>
+                <span id="demo-lender-status" class="save-status unsaved">Ready check</span>
+              </div>
+              <div id="demo-lender-steps" class="contract-stepper prep-stepper"></div>
+              <div class="demo-prep-summary" id="demo-lender-summary"></div>
+              <div class="demo-capital-control">
+                <label>
+                  cUSDC to escrow
+                  <input id="demo-lender-escrow-amount" type="number" min="1" step="1" inputmode="numeric" />
+                </label>
+                <input id="demo-lender-escrow-slider" type="range" min="1" max="1000" step="1" />
+              </div>
+              <div id="demo-lender-shielded-status" class="shielded-credit-status">
+                Lender escrow spends shielded cUSDC. Check readiness or shield cUSDC before escrowing.
+              </div>
+              <div class="demo-form-row two-actions">
+                <button id="demo-check-shielded-credit" class="ghost" type="button">Check shielded cUSDC</button>
+                <a class="button-link ghost" href="https://portfolio.zama.org/shield" target="_blank" rel="noreferrer"
+                  >Shield cUSDC</a
+                >
+              </div>
+              <div class="demo-form-row">
+                <button id="demo-prepare-lender" type="button">Escrow Lender cUSDC</button>
+              </div>
+              <dl class="demo-address-list">
+                <div>
+                  <dt>Credit token</dt>
+                  <dd id="demo-lender-credit-token">Manifest cUSDC</dd>
+                </div>
+                <div>
+                  <dt>Commitment</dt>
+                  <dd id="demo-lender-commitment">None</dd>
+                </div>
+                <div>
+                  <dt>Latest escrow</dt>
+                  <dd id="demo-lender-backing-id">None</dd>
+                </div>
+                <div>
+                  <dt>Published preference</dt>
+                  <dd id="demo-lender-preference-id">None</dd>
+                </div>
+              </dl>
+            </article>
+
+            <article class="panel demo-util-card demo-local-card">
+              <div class="panel-head">
+                <div>
+                  <h3>Local Demo State</h3>
+                  <p class="supporting">Manage only this browser's cached demo bundles and progress.</p>
+                </div>
+              </div>
+              <div class="demo-form-row two-actions">
+                <button id="seed-demo" type="button" title="Restore browser-local sample bundles">
+                  Seed Local Demo
+                </button>
+                <button id="reset-demo" class="ghost" type="button" title="Clear this browser's local demo state">
+                  Reset Local
+                </button>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="offer-publish-modal" class="offer-modal" hidden>
+      <div class="offer-modal-backdrop" aria-hidden="true"></div>
+      <section class="offer-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="offer-publish-title">
+        <div class="panel-head">
+          <div>
+            <h3 id="offer-publish-title">Publish Private Offer</h3>
+            <p id="offer-publish-message" class="supporting">Preparing encrypted offer publication.</p>
+          </div>
+          <button id="offer-publish-close" class="ghost" type="button">Close</button>
+        </div>
+        <div id="offer-publish-steps" class="contract-stepper publish-stepper"></div>
+      </section>
+    </div>
+
+    <div id="app-help-modal" class="app-help-modal" hidden>
+      <div class="app-help-backdrop" aria-hidden="true"></div>
+      <section class="app-help-dialog horn-panel" role="dialog" aria-modal="true" aria-labelledby="app-help-title">
+        <button id="app-help-close" class="app-help-close ghost" type="button" aria-label="Close help">Close</button>
+        <div class="app-help-content">
+          <p id="app-help-title" class="app-help-title">Ha Ha Ha! Well met traveler!</p>
+          <p>We know learning dragon lore can be a bit much, so here's a translation to mortal human language:</p>
+          <p class="app-help-line">
+            <span class="app-help-icon" aria-hidden="true">🔑</span>
+            <span>This is a lending protocol, but a bit different than what is out there already.</span>
+          </p>
+          <p class="app-help-line">
+            <span class="app-help-icon app-help-red" aria-hidden="true">‼️</span>
+            <span>
+              For the first time your loan terms and negotiating preferences are completely private thanks to Zama FHE
+              technology: TokenOps, ERC-7984 and confidential smart contracts!
+            </span>
+          </p>
+          <p class="app-help-line">
+            <span class="app-help-icon" aria-hidden="true">➡️</span>
+            <span>
+              The idea is that a Borrower (Red Dragon) having vesting tokens can submit a confidential offer to borrow
+              against them, from a Lender (Blue Dragon) and if the Borrower defaults the Lender gets the tokens.
+            </span>
+          </p>
+          <p class="app-help-line">
+            <span class="app-help-icon" aria-hidden="true">ℹ️</span>
+            <span>
+              The main use case is illiquid vesting tokens, think internet capital markets startups, but people want to
+              access the value behind this equity, and others want to access exposure to this equity. It's really a
+              borrower's market, where sophisticated lenders choose terms, to adequately compensate for no price-based
+              liquidation since loan terms are fully agreed upon beforehand.
+            </span>
+          </p>
+          <p class="app-help-line">
+            <span class="app-help-icon" aria-hidden="true">ℹ️</span>
+            <span>
+              Offers and Loans are created with Confidential Bundles of conditions, that each user configures as a
+              negotiating strategy. A matching engine considers potential matches before finding a
+              game-theoretic Nash-equilibrium confidential loan agreement and executing it.
+            </span>
+          </p>
+          <div class="app-help-section">
+            <span class="app-help-icon" aria-hidden="true">🛠️</span>
+            <div>
+              <strong>Demo Flow:</strong>
+              <ol>
+                <li>Onboard some demo capital as either Borrower or Lender in the Demo Utils section of the page.</li>
+                <li>Use the Builder page to create and publish a Private Offer by configuring a bundle of negotiation preferences.</li>
+                <li>Execute your deal offer against counterparties, confidentially, using the Loans section.</li>
+              </ol>
+            </div>
+          </div>
+          <p class="app-help-line">
+            <span class="app-help-icon" aria-hidden="true">❓</span>
+            <span>
+              <strong>Other notes:</strong> The dragon picture controls transitions between Borrower and Lender
+              perspectives.
+            </span>
+          </p>
+        </div>
+        <div class="app-help-footer">
+          <label class="app-help-toggle">
+            <input id="app-help-hide-start" type="checkbox" />
+            <span>Don't show this on start</span>
+          </label>
+          <button id="app-help-dismiss" class="app-help-dismiss" type="button">Dismiss</button>
+        </div>
+      </section>
+    </div>
+
+    <script src="./vendor/ethers.umd.min.js?v=6.16.0"></script>
+    <script src="./vendor/relayer-sdk/relayer-sdk-js.umd.js?v=0.4.1"></script>
+    <script src="./wallet-config.js?v=20260706-metamask-ipad"></script>
+    <script src="./vendor/cvc-metamask-wallet.js?v=20260706-metamask-ipad"></script>
+    <script src="./app.js?v=20260708-credit-units-1"></script>
+    <script>
+      window.ZAHAK_BUILD_ID = "cvc-dragon-shell-20260706";
+      window.ZAHAK_CACHE_FLAG = window.ZAHAK_BUILD_ID;
+      window.ZAHAK_WELCOME_CONFIG = {
+        assetBaseUrl: "/dragon-transition/assets/",
+        autoStart: false,
+        initialFullscreen: true,
+        initialLore: true,
+        cacheBust: true,
+        eventPrefix: "zahak",
+      };
+    </script>
+    <script src="./dragon-transition/script.js?v=20260707-welcome-audio-1"></script>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-03T00:00:00.000Z",
+  "network": "hardhat",
+  "chainId": "31337",
+  "rpcUrl": null,
+  "assets": {
+    "confidentialCreditToken": "0x0000000000000000000000000000000000000000",
+    "demoUsdToken": "0x0000000000000000000000000000000000000000",
+    "collateralToken": "0x0000000000000000000000000000000000000000",
+    "tokenOpsManager": "0x0000000000000000000000000000000000000000"
+  },
+  "fhevm": null,
+  "contracts": {
+    "ConfidentialPreferenceBook": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "abi": []
+    },
+    "NashNegotiationEngine": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "abi": []
+    },
+    "TokenOpsVestingAdapter": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "abi": []
+    },
+    "LoanEscrowFactory": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "abi": []
+    },
+    "ERC7984CreditAdapter": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "abi": []
+    },
+    "BondManager": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "abi": []
+    },
+    "MatchSettlementCoordinator": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "abi": []
+    }
+  },
+  "mockContracts": {
+    "MockTokenOpsVestingManager": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "abi": []
+    },
+    "MockConfidentialCreditAdapter": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "abi": []
+    }
+  },
+  "demoContracts": {
+    "DemoUsdToken": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "abi": []
+    },
+    "DemoVestingToken": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "abi": []
+    },
+    "DemoTokenOpsVestingFactory": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "abi": []
+    },
+    "DemoCreditFaucet": {
+      "address": "0x0000000000000000000000000000000000000000",
+      "abi": []
+    }
+  },
+  "demoArtifacts": {
+    "DemoVestingToken": {
+      "abi": [],
+      "bytecode": "0x"
+    },
+    "DemoTokenOpsVestingFactory": {
+      "abi": [],
+      "bytecode": "0x"
+    }
+  },
+  "abis": {
+    "LoanEscrow": []
+  }
+}
