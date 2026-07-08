@@ -5,8 +5,7 @@
 An experimental confidential vesting-backed credit protocol built with Zama fhEVM, OpenZeppelin Confidential Contracts,
 ERC-7984 confidential tokens, and TokenOps confidential vesting integration.
 
-The first deployment target is local development and Sepolia testnet. Testnet deployment is a safety and regulatory
-constraint; the software quality bar is launch-ready.
+The first deployment target is local development and Sepolia testnet. 
 
 ## What This Builds
 
