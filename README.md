@@ -1,6 +1,6 @@
 # WARNING: UNAUDITED, EXPERIMENTAL CODE; NOT FOR PRODUCTION
 
-# Confidential Vesting Credit
+# ZAHAK - Confidential Vesting Credit
 
 An experimental confidential vesting-backed credit protocol built with Zama fhEVM, OpenZeppelin Confidential Contracts,
 ERC-7984 confidential tokens, and TokenOps confidential vesting integration.
@@ -39,15 +39,30 @@ Implemented and tested:
 - ERC-7984 cUSDC project interface
 - TypeScript protocol SDK helpers for bundle construction, coarse buckets, term hashes, and bond quotes
 
+Recently validated on Sepolia:
+
+- fresh non-default-wallet core deployment and read-only wiring checks
+- TokenOps CTTT manager creation through the official TokenOps factory
+- TokenOps CTTT vesting custody, pledge registration, release, zero vesting ID compatibility, and unpledged custody
+  recovery
+- ERC-7984 `cUSDCMock` correct-amount and wrong-amount callback handling, public-decryption finalization, retry,
+  consumption, reusable lender credit custody, funding, repayment, and public unwrap/finalize into underlying `USDCMock`
+- browser-style encrypted Preference Bundle submission through the relayer proof path
+- encrypted match execution, selected-term computation, aggregate feasibility finalization, settlement coordinator
+  escrow creation, matched escrow repayment, and failed-match bond slashing
+- post-rotation end-to-end smoke where a lender escrowed confidential cUSDC, a loan activated, and the borrower
+  unwrapped exactly `1000` `USDCMock`
+
+
 Reference / deferred:
 
 - `ProtocolAccountRegistry`
 
 Next major slices:
 
-- Sepolia validation for ERC-7984 balance-level refund accounting and escrow funding/repayment wiring
-- Sepolia TokenOps integration with real collateral positions
-- UI match and loan settlement wiring against the live contracts
+manual browser-wallet validation for the current match, TokenOps, and ERC-7984 escrow paths
+- durable indexing beyond the current UI lookback cache
+- final security, dependency, and deployment hardening pass
 
 ## Setup
 
@@ -58,8 +73,8 @@ npm test
 npm run demo:local
 ```
 
-`npm run demo:local` executes the protocol path without testnet: create borrower/lender preference bundles, preview a
-match, post/refund a bond, create a loan escrow, register mock TokenOps collateral, fund, activate, and repay.
+`npm run demo:local` executes the protocol path without testnet: create borrower/lender preference bundles, run bounded
+matching, post/refund a bond, create a loan escrow, register mock TokenOps collateral, fund, activate, and repay.
 
 ## Local Deployment Smoke Test
 
@@ -123,13 +138,26 @@ npx hardhat vars set ETHERSCAN_API_KEY
 CVC_ERC7984_TOKEN_ADDRESS=0x... npm run deploy:sepolia
 ```
 
-`CVC_ERC7984_TOKEN_ADDRESS` must be the deployed ERC-7984 confidential cUSDT/cUSDC token address. The current Sepolia
-manifest uses canonical `cUSDCMock` at `0x7c5BF43B851c1dff1a4feE8dB225b87f2C223639`, and the deployed
-`ERC7984CreditAdapter` at `0x53143CBC61A9d64c19551a247Fa6d31c2Cc2aecB` has passed live correct-amount and wrong-amount
-callback, public-decryption finalization, adapter retry, and consumption smokes.
+Current Sepolia deployment:
 
-Sepolia integration is still gated on real TokenOps collateral configuration, ERC-7984 escrow funding/repayment wiring,
-encrypted match execution, and UI loan settlement wiring.
+| Component                          | Address                                      |
+| ---------------------------------- | -------------------------------------------- |
+| Deployer/operator wallet           | `0xA27935e8958bd65aFD6F28eee115e3883eafF03D` |
+| `ConfidentialPreferenceBook`       | `0x882Da9cB5BD5DA4cCB58d91040d60dCC50183Ecb` |
+| `NashNegotiationEngine`            | `0x7267122A75B7a7890AF9ac4003a737FFF22e9150` |
+| `TokenOpsVestingAdapter`           | `0xc92c61ebdaC716238AF4D70A2696663D16220B94` |
+| `LoanEscrowFactory`                | `0x5c81d01795D36642A4137643F8D11fE956567d85` |
+| `ERC7984CreditAdapter`             | `0xF832f4c797eE146198a79EdfB0E0B2Ac82ccE3F2` |
+| `BondManager`                      | `0x390feeFCA76d7ff56fcA0fCC74873A70fAbb24F7` |
+| `MatchSettlementCoordinator`       | `0xA73aF9DbFfACB115090452E17a11F85931359Ce1` |
+| ERC-7984 confidential credit token | `0x7c5BF43B851c1dff1a4feE8dB225b87f2C223639` |
+| TokenOps CTTT collateral token     | `0x258F9D60dc023870e4E3109c894D834D5377361a` |
+| CVC TokenOps CTTT vesting manager  | `0xb32208BF362b48672cAf58C52Ee45908e3cc6333` |
+
+Sepolia integration is no longer blocked on TokenOps collateral configuration. Real TokenOps custody/release and
+ERC-7984 credit paths have script-level Sepolia validation, including a post-rotation end-to-end match smoke. The
+remaining gate is manual browser-wallet validation plus any durable indexing requirements beyond the current UI lookback
+cache.
 
 ## Architecture
 
