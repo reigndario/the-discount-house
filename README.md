@@ -142,6 +142,8 @@ See:
 
 ## Security Notes
 
+This code is unaudited and not for educational purposes only, not production use.
+
 This repository uses the official Zama Hardhat template. Local Hardhat tests use the Zama mock runtime, while Sepolia
 testing exercises real fhEVM network behavior. Any feature that relies on ACLs, encrypted comparison, relayer behavior,
 or gateway decryption must be validated on Sepolia before public demonstration.
@@ -151,4 +153,4 @@ They are tracked as launch blockers until resolved, upgraded, or explicitly risk
 
 ## Validation
 
-Does this work? Yes! Borrower trace on BlockScout: https://eth-sepolia.blockscout.com/address/0x5A57034b97253a4d205698B685DB78a9Ca9C5ef1?tab=txs 
+Does this work? As far as testnet goes, yes! Borrower trace on BlockScout: https://eth-sepolia.blockscout.com/address/0x5A57034b97253a4d205698B685DB78a9Ca9C5ef1?tab=txs 
