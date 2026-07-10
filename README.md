@@ -1,5 +1,10 @@
 # WARNING: UNAUDITED, EXPERIMENTAL CODE; NOT FOR PRODUCTION
 
+# Acknowledgements:
+Ashton Anchors for the Dragon Lore https://github.com/ashton-anchors/zahak-dragons
+
+Together we borked the git history so, there's basically a copy of it in this repo 🤷
+
 # ZAHAK - Confidential Vesting Credit
 
 An experimental confidential vesting-backed credit protocol built with Zama fhEVM, OpenZeppelin Confidential Contracts,
