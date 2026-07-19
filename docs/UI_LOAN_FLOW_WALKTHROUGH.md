@@ -21,15 +21,14 @@ This is the cold-start demo path for a user who does not change any default bund
 1. Open the app.
 2. On the first dragon prompt, click `Yes`.
 3. Connect the borrower wallet in MetaMask.
-4. On the dragon choice prompt, select `Red Dragon`.
-5. Click `Choose`.
-6. If the help modal appears, click `Dismiss` or `Close`.
-7. Confirm the app is in the borrower perspective. The main nav should show `Book`, `Builder`, `Loans`, and `Demo Utils`.
+4. Click `Choose`.
+5. Click on the RED DRAGON.
+6. Confirm you are in the RED DRAGON (Borrower) perspective by the red hues in the UI and also the RED DRAGON is active in the thumbnail in the top right.
 
 ## 2. Borrower Onboards Vesting Collateral
 
 1. Click `Demo Utils`.
-2. In `Borrower Capital`, leave `Collateral token name` as `Demo Vested Collateral`.
+2. In `Borrower Capital`, change `Collateral token name` to something distinctive you will remember.
 3. Leave `Tokens to custody` at its default value.
 4. Click `Onboard Collateral`.
 5. Sign each MetaMask transaction that appears.
@@ -38,20 +37,14 @@ This is the cold-start demo path for a user who does not change any default bund
    - `Vesting`
    - `Custody`
 7. Confirm the status reads `Collateral Onboarded Successfully`.
-8. Confirm these fields are no longer `None`:
-   - `Collateral token`
-   - `Vesting manager`
-   - `Vesting ID`
-   - `Latest custody`
 
-Use `Onboard New Token` only if you intentionally want a second collateral market. It is not needed for the default flow.
 
 ## 3. Borrower Publishes the Default Offer Bundle
 
 1. Click `Builder`.
-2. In `Preference Bundles (ranked)`, select the top borrower bundle, usually `Best Case`.
-3. Confirm `Collateral asset` points to the demo collateral just onboarded.
-4. Do not change the default sliders or priority polygon.
+2. You should see a bunch of pre-filled preferences. IF NOT, in `Preference Bundles (ranked)`, select the top borrower bundle, usually `Best Case`.
+3. Confirm `Collateral asset` points to the demo collateral just onboarded (remember the name you used!).
+4. Do not change the default sliders or priority polygon the first time. Once you figure the app out you can play with the defalut strategies later.
 5. Click `Publish Private Offer`.
 6. The `Publish Private Offer` modal opens. Sign transactions as requested while the modal advances through:
    - `Bundle`
@@ -71,13 +64,12 @@ Use `Onboard New Token` only if you intentionally want a second collateral marke
 2. Return to the welcome flow.
 3. Click `Yes`.
 4. Connect the lender wallet in MetaMask.
-5. Select `Blue Dragon`.
-6. Click `Choose`.
-7. If the help modal appears, click `Dismiss` or `Close`.
+5. Click `Choose`.
+6. Click on the BLUE DRAGON this time
 
 If using the same wallet for both roles, you can instead use the dragon role switch and choose the Blue Dragon role.
 
-## 5. Lender Gets and Shields cUSDC
+## 5. Lender Gets and Shields cUSDC. Skip this step if you ARE SURE you have > 200 SHIELDED cUSDC already.
 
 1. Click `Demo Utils`.
 2. In `Lender Capital`, click `Shield cUSDC`.
@@ -105,10 +97,10 @@ If using the same wallet for both roles, you can instead use the dragon role swi
 ## 7. Lender Publishes the Default Offer Bundle
 
 1. Click `Builder`.
-2. In `Preference Bundles (ranked)`, select the top lender bundle, usually `Senior Supply`.
-3. Confirm `Collateral asset` matches the borrower demo collateral market. The dropdown should show the borrower token
-   name/address and vesting manager if the same browser session saw the borrower onboarding.
-4. Do not change the default sliders or priority polygon.
+2. If you don't see a bunch of pre-populated preferences in `Preference Bundles (ranked)`, select the top lender bundle, usually `Senior Supply`.
+3. Select the `Collateral asset` that matches the borrower demo collateral market name you chose earlier. The dropdown should show the borrower token
+   name/address and vesting manager if the same browser session saw the borrower onboarding. REMEMBER THE NAME YOU USED!!
+4. Do not change the default sliders or priority polygon the first time. It's really an advanced feature.
 5. Click `Publish Private Offer`.
 6. In the `Publish Private Offer` modal, sign transactions as requested while it advances through:
    - `Bundle`
@@ -155,13 +147,11 @@ At this point the borrower side should have received the borrowed confidential c
 
 There is no in-app unshield button in the current UI.
 
-1. Switch back to the borrower wallet. If needed, click the connected wallet address button in the top bar to disconnect,
-   then reconnect the borrower wallet through `Yes`.
-2. Choose `Red Dragon` and click `Choose`.
-3. Open `https://portfolio.zama.org/shield`.
-4. Connect the borrower wallet on Sepolia.
-5. Use the Zama Portfolio unshield/unwrap flow for `cUSDC`.
-6. Unshield the borrowed amount shown in your local escrow terms, if available. If the app only has indexed on-chain data,
+1. Switch back to the borrower wallet. 
+2. Open `https://portfolio.zama.org/shield`.
+3. Connect the borrower wallet on Sepolia.
+4. Use the Zama Portfolio unshield/unwrap flow for `cUSDC`.
+5. Unshield the borrowed amount shown in your local escrow terms, if available. If the app only has indexed on-chain data,
    exact economics may show as encrypted and you should use the amount expected from the demo defaults.
 
 ## Optional Full Lifecycle
