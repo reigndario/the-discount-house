@@ -4,7 +4,7 @@ This is the shortest cold-start path through the demo loan flow using defaults.
 
 ## Prerequisites
 
-- Use a browser with the required wallet extension installed and connected to the demo network.
+- Use a browser with the required wallet extension installed and connected to the Ethereum Sepolia network.
 - Have enough native testnet gas in the wallets to confirm transactions.
 - Use two demo wallets for clarity:
   - **Borrower wallet**: creates the vesting contract/token and publishes the offer bundle.
