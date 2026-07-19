@@ -128,6 +128,8 @@ If using the same wallet for both roles, you can instead use the dragon role swi
 7. Wait for the status `Settled` with message `Match settled into escrow.`
 8. In `Escrows`, select the new escrow if it is not already selected.
 
+This is actually cool because the smart contract is executing an ENCRYPTED NEGOTIATION on the users' behalf!
+
 ## 9. Complete Loan Activation
 
 In `Selected Escrow`, complete the enabled action buttons in order:
