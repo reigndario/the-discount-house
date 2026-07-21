@@ -40,6 +40,7 @@ This is the cold-start demo path for a user who does not change any default bund
 
 
 ## 3. Borrower Publishes the Default Offer Bundle
+In this step you are building your confidential negotiation preferences. For best chance of matching with the other side of the order book, leave the sliders alone.
 
 1. Click `Builder`.
 2. You should see a bunch of pre-filled preferences. IF NOT, in `Preference Bundles (ranked)`, select the top borrower bundle, usually `Best Case`.
@@ -57,6 +58,7 @@ This is the cold-start demo path for a user who does not change any default bund
    borrower bucket under `Coarse Discovery Buckets`.
 
 `Save Local Order` is not required for this flow. Bundle ordering is browser-local only.
+
 
 ## 4. Switch to the Lender Wallet and Blue Dragon
 
@@ -95,6 +97,7 @@ If using the same wallet for both roles, you can instead use the dragon role swi
 7. Confirm `Commitment` and `Latest escrow` are no longer `None`.
 
 ## 7. Lender Publishes the Default Offer Bundle
+In this step you are building your confidential negotiation preferences. For best chance of matching with the other side of the order book, leave the sliders alone.
 
 1. Click `Builder`.
 2. If you don't see a bunch of pre-populated preferences in `Preference Bundles (ranked)`, select the top lender bundle, usually `Senior Supply`.
