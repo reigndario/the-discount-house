@@ -673,13 +673,13 @@ function bindDragonWelcome() {
     },
   };
 
-  window.addEventListener("zahak:ready", () => {
+  window.addEventListener("tdh:ready", () => {
     dragonRuntimeReady = true;
     syncDragonModeToRole();
     void maybeStartDragonWelcome();
   });
 
-  window.addEventListener("zahak:choice", (event) => {
+  window.addEventListener("tdh:choice", (event) => {
     const currentVibe = document.body.dataset.vibe;
     const shouldTrustChoice = !currentVibe || currentVibe === "mixed" || event.detail?.source === "api";
     if (shouldTrustChoice && setActiveRoleFromDragonSide(event.detail?.chosenSide, { syncDragon: false })) {
@@ -691,11 +691,11 @@ function bindDragonWelcome() {
     }
   });
 
-  window.addEventListener("zahak:transition-start", (event) => {
+  window.addEventListener("tdh:transition-start", (event) => {
     setActiveRoleFromDragonSide(event.detail?.toMode ?? event.detail?.to, { syncDragon: false });
   });
 
-  window.addEventListener("zahak:transition-end", (event) => {
+  window.addEventListener("tdh:transition-end", (event) => {
     dragonChoicePending = false;
     setActiveRoleFromDragonSide(event.detail?.toMode ?? event.detail?.to, {
       syncDragon: false,
@@ -705,7 +705,7 @@ function bindDragonWelcome() {
     maybeOpenAppHelpModal();
   });
 
-  window.addEventListener("zahak:mode-change", (event) => {
+  window.addEventListener("tdh:mode-change", (event) => {
     setActiveRoleFromDragonSide(event.detail?.mode, { syncDragon: false, renderWhenSame: true });
   });
 
@@ -814,9 +814,9 @@ async function maybeStartDragonWelcome() {
   if (!initialWalletProbeComplete && window.ethereum) return;
 
   document.body.classList.remove("dragon-entered");
-  if (dragonWelcomeStarted || !window.ZahakWelcome) return;
+  if (dragonWelcomeStarted || !window.TDHWelcome) return;
   dragonWelcomeStarted = true;
-  window.ZahakWelcome.openWelcome({ fullscreen: true, instant: true, promptDelayMs: 0 });
+  window.TDHWelcome.openWelcome({ fullscreen: true, instant: true, promptDelayMs: 0 });
 }
 
 function returnToDragonWelcome() {
@@ -824,9 +824,9 @@ function returnToDragonWelcome() {
   dragonWelcomeStarted = false;
   document.body.classList.remove("dragon-entered");
   closeAppHelpModal();
-  window.ZahakTransition?.setMode?.("mixed");
-  window.ZahakWelcome?.openWelcome?.({ fullscreen: true, instant: true, promptDelayMs: 0 });
-  dragonWelcomeStarted = Boolean(window.ZahakWelcome);
+  window.TDHTransition?.setMode?.("mixed");
+  window.TDHWelcome?.openWelcome?.({ fullscreen: true, instant: true, promptDelayMs: 0 });
+  dragonWelcomeStarted = Boolean(window.TDHWelcome);
 }
 
 async function connectWalletForDragon() {
@@ -852,16 +852,16 @@ async function connectWalletForDragon() {
 }
 
 function syncDragonModeToRole() {
-  if (!window.ZahakTransition) return;
+  if (!window.TDHTransition) return;
   if (dragonChoicePending) {
-    window.ZahakTransition.setMode("mixed");
+    window.TDHTransition.setMode("mixed");
     return;
   }
   if (hasUsableWalletConnection()) {
-    window.ZahakTransition.setSide(dragonSideForRole(state.role));
+    window.TDHTransition.setSide(dragonSideForRole(state.role));
     return;
   }
-  window.ZahakTransition.setMode("mixed");
+  window.TDHTransition.setMode("mixed");
 }
 
 function roleForDragonSide(side) {

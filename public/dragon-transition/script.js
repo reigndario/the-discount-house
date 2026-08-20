@@ -1,7 +1,7 @@
 const TAU = Math.PI * 2;
 const TRANSITION_MS = 8200;
-const BUILD_ID = window.ZAHAK_BUILD_ID || "dev";
-const CACHE_FLAG = window.ZAHAK_CACHE_FLAG || `${BUILD_ID}-${Date.now().toString(36)}`;
+const BUILD_ID = window.TDH_BUILD_ID || "dev";
+const CACHE_FLAG = window.TDH_CACHE_FLAG || `${BUILD_ID}-${Date.now().toString(36)}`;
 const DEFAULT_WELCOME_CONFIG = {
   root: null,
   assetBaseUrl: "assets/",
@@ -9,25 +9,25 @@ const DEFAULT_WELCOME_CONFIG = {
   initialFullscreen: true,
   initialLore: true,
   cacheBust: true,
-  eventPrefix: "zahak",
+  eventPrefix: "tdh",
 };
-const WELCOME_CONFIG = normalizeWelcomeConfig(window.ZAHAK_WELCOME_CONFIG);
+const WELCOME_CONFIG = normalizeWelcomeConfig(window.TDH_WELCOME_CONFIG);
 const EFFECT_PROFILE = resolveEffectProfile();
-const rootNode = resolveZahakRoot(WELCOME_CONFIG.root);
-const canvas = queryZahakElement("[data-zahak-scene-canvas]", "#zahak-bg");
+const rootNode = resolveTDHRoot(WELCOME_CONFIG.root);
+const canvas = queryTDHElement("[data-tdh-scene-canvas]", "#tdh-bg");
 if (!canvas) {
-  throw new Error("Zahak welcome scene requires a canvas with data-zahak-scene-canvas or #zahak-bg.");
+  throw new Error("TDH welcome scene requires a canvas with data-tdh-scene-canvas or #tdh-bg.");
 }
 const ctx = canvas.getContext("2d", { alpha: false });
 if (!ctx) {
-  throw new Error("Zahak welcome scene could not create a 2D canvas context.");
+  throw new Error("TDH welcome scene could not create a 2D canvas context.");
 }
-const ambientCanvas = queryZahakElement("[data-zahak-ambient-canvas]", "#ambient-bg");
+const ambientCanvas = queryTDHElement("[data-tdh-ambient-canvas]", "#ambient-bg");
 const ambientCtx = ambientCanvas ? ambientCanvas.getContext("2d", { alpha: true }) : null;
-const vibeSwitch = queryZahakElement("[data-zahak-vibe-switch]", "#vibe-switch");
-const vibeFrame = queryZahakElement("[data-zahak-vibe-frame]", ".vibe-switch__frame");
-const appShell = queryZahakElement("[data-zahak-demo-shell]");
-const privateActionButton = queryZahakElement("[data-zahak-private-action]", "#privateAction");
+const vibeSwitch = queryTDHElement("[data-tdh-vibe-switch]", "#vibe-switch");
+const vibeFrame = queryTDHElement("[data-tdh-vibe-frame]", ".vibe-switch__frame");
+const appShell = queryTDHElement("[data-tdh-demo-shell]");
+const privateActionButton = queryTDHElement("[data-tdh-private-action]", "#privateAction");
 const SOURCE_SIZE = { w: 1672, h: 941 };
 const MAX_CANVAS_PIXELS = EFFECT_PROFILE.maxCanvasPixels;
 const VIBE_SWITCH_EXPAND_MS = 1040;
@@ -346,8 +346,8 @@ const perfStats = {
   shardDraws: 0,
 };
 
-document.documentElement.dataset.zahakFx = EFFECT_PROFILE.name;
-document.body?.setAttribute("data-zahak-fx", EFFECT_PROFILE.name);
+document.documentElement.dataset.tdhFx = EFFECT_PROFILE.name;
+document.body?.setAttribute("data-tdh-fx", EFFECT_PROFILE.name);
 applyAssetCssVariables();
 const assets = loadLayerImages();
 const dragonParticles = {
@@ -447,7 +447,7 @@ function readEffectMode() {
   if (explicit) return explicit;
 
   try {
-    return window.localStorage?.getItem("cvc.fx") ?? window.localStorage?.getItem("zahak.fx") ?? null;
+    return window.localStorage?.getItem("cvc.fx") ?? window.localStorage?.getItem("tdh.fx") ?? null;
   } catch {
     return null;
   }
@@ -473,14 +473,14 @@ function scaledEffectRate(value, scale) {
   return value * scale;
 }
 
-function resolveZahakRoot(root) {
+function resolveTDHRoot(root) {
   if (!root) return document;
   if (typeof root === "string") return document.querySelector(root) || document;
   if (root.querySelector) return root;
   return document;
 }
 
-function queryZahakElement(dataSelector, fallbackSelector) {
+function queryTDHElement(dataSelector, fallbackSelector) {
   return (
     rootNode.querySelector(dataSelector) ||
     rootNode.querySelector(fallbackSelector) ||
@@ -522,7 +522,7 @@ function applyAssetCssVariables() {
   style.setProperty("--material-void", cssAssetUrl(ASSET_MANIFEST.materials.void));
 }
 
-function emitZahakEvent(type, detail = {}) {
+function emitTDHEvent(type, detail = {}) {
   const eventName = `${WELCOME_CONFIG.eventPrefix}:${type}`;
   const payload = {
     buildId: BUILD_ID,
@@ -565,7 +565,7 @@ function loadLayerImages() {
         prepareDragonShardSprites();
         resize();
         scheduleFrame();
-        emitZahakEvent("ready", { assets: getAssetManifest() });
+        emitTDHEvent("ready", { assets: getAssetManifest() });
       }
     });
     img.src = withCacheFlag(assetUrl(layer.src));
@@ -959,7 +959,7 @@ function setPageVibe(mode) {
   const previous = document.body.dataset.vibe;
   document.body.dataset.vibe = normalized;
   if (previous && previous !== normalized) {
-    emitZahakEvent("mode-change", { mode: normalized, previousMode: previous });
+    emitTDHEvent("mode-change", { mode: normalized, previousMode: previous });
   }
 }
 
@@ -967,12 +967,12 @@ function setVibeSwitchFocus(active, options = {}) {
   document.body.classList.toggle("vibe-transitioning", active);
   if (active) {
     openVibeOverlay(options);
-    emitZahakEvent("fullscreen-open", { instant: Boolean(options.instant) });
+    emitTDHEvent("fullscreen-open", { instant: Boolean(options.instant) });
     return;
   }
 
   closeVibeOverlay();
-  emitZahakEvent("fullscreen-close");
+  emitTDHEvent("fullscreen-close");
 }
 
 function setOverlayBox(element, rect) {
@@ -1202,7 +1202,7 @@ function handleVibeOverlayChoice(event) {
   event.preventDefault();
   event.stopPropagation();
   const chosenSide = getChosenSideFromViewport(event.clientX);
-  emitZahakEvent("choice", { chosenSide });
+  emitTDHEvent("choice", { chosenSide });
   toggleTransition(chosenSide);
 }
 
@@ -2921,7 +2921,7 @@ function toggleTransition(chosenSide = null) {
     }
     transition = null;
     setVibeSwitchFocus(false);
-    emitZahakEvent("transition-end", {
+    emitTDHEvent("transition-end", {
       from: fromSide,
       to: currentSide,
       fromMode,
@@ -2949,7 +2949,7 @@ function toggleTransition(chosenSide = null) {
       particlesCleared: false,
       start: getTransitionStartTime(),
     };
-    emitZahakEvent("transition-start", {
+    emitTDHEvent("transition-start", {
       from: transition.from,
       to: transition.to,
       fromMode: transition.fromMode,
@@ -2976,7 +2976,7 @@ function toggleTransition(chosenSide = null) {
     particlesCleared: false,
     start: getTransitionStartTime(),
   };
-  emitZahakEvent("transition-start", {
+  emitTDHEvent("transition-start", {
     from: transition.from,
     to: transition.to,
     fromMode: transition.fromMode,
@@ -2999,7 +2999,7 @@ function completeExpiredTransition(now = performance.now()) {
   setPageVibe(vibeMode);
   transition = null;
   setVibeSwitchFocus(false);
-  emitZahakEvent("transition-end", {
+  emitTDHEvent("transition-end", {
     from: completedTransition.from,
     to: completedTransition.to,
     fromMode: completedTransition.fromMode,
@@ -3030,7 +3030,7 @@ function startInitialLoreFlow() {
   if (initialLoreFlowStarted) return;
 
   initialLoreFlowStarted = true;
-  emitZahakEvent("welcome-start", { flowMode: "initial" });
+  emitTDHEvent("welcome-start", { flowMode: "initial" });
   startPrivateLorePrompt("initial", {
     fullscreen: WELCOME_CONFIG.initialFullscreen !== false,
     instant: WELCOME_CONFIG.initialFullscreen !== false,
@@ -3097,7 +3097,7 @@ function showPrivateLorePrompt() {
   noButton.addEventListener("click", handlePrivateLoreNo);
 
   document.body.appendChild(privateLoreModal);
-  emitZahakEvent("lore-prompt-open", { flowMode: privateLoreFlowMode, step: "wallet" });
+  emitTDHEvent("lore-prompt-open", { flowMode: privateLoreFlowMode, step: "wallet" });
   requestAnimationFrame(() => {
     if (!privateLoreModal) return;
     privateLoreModal.classList.add("is-visible");
@@ -3208,7 +3208,7 @@ function dismissPrivateLorePrompt(afterDismiss = null) {
       modal.remove();
     }
     privateLorePromptActive = false;
-    emitZahakEvent("lore-prompt-close", { flowMode: privateLoreFlowMode });
+    emitTDHEvent("lore-prompt-close", { flowMode: privateLoreFlowMode });
     if (afterDismiss) afterDismiss();
   }, PRIVATE_LORE_DISMISS_MS);
 }
@@ -3292,7 +3292,7 @@ function showDragonLorePrompt() {
   });
 
   document.body.appendChild(privateLoreModal);
-  emitZahakEvent("lore-choice-open", { flowMode: privateLoreFlowMode });
+  emitTDHEvent("lore-choice-open", { flowMode: privateLoreFlowMode });
   requestAnimationFrame(() => {
     if (!privateLoreModal) return;
     privateLoreModal.classList.add("is-visible");
@@ -3341,7 +3341,7 @@ function showDragonLoreDetailsModal(event) {
   const closeButton = privateLoreDetailModal.querySelector(".private-lore-choice--close");
   closeButton.addEventListener("click", closeDragonLoreDetailsModal);
   privateLoreModal.appendChild(privateLoreDetailModal);
-  emitZahakEvent("lore-details-open");
+  emitTDHEvent("lore-details-open");
   requestAnimationFrame(() => {
     if (!privateLoreDetailModal) return;
     privateLoreDetailModal.classList.add("is-visible");
@@ -3360,7 +3360,7 @@ function closeDragonLoreDetailsModal(event) {
     if (privateLoreDetailModal === modal) {
       modal.remove();
       privateLoreDetailModal = null;
-      emitZahakEvent("lore-details-close");
+      emitTDHEvent("lore-details-close");
     }
   }, 180);
 }
@@ -3387,7 +3387,7 @@ function ensurePrivateAudio() {
 function startPrivateBurst(options = {}) {
   ensurePrivateAudio();
   privateBurstUntil = performance.now() + PRIVATE_BURST_MS;
-  emitZahakEvent("private-burst-start", { durationMs: PRIVATE_BURST_MS });
+  emitTDHEvent("private-burst-start", { durationMs: PRIVATE_BURST_MS });
   if (privateAudioTimer !== null) {
     window.clearTimeout(privateAudioTimer);
   }
@@ -3478,7 +3478,7 @@ function handleWindowResize() {
 
 function handleVibeSwitchClick(event) {
   const chosenSide = getChosenSideFromPointer(event);
-  emitZahakEvent("choice", { chosenSide, source: "thumbnail" });
+  emitTDHEvent("choice", { chosenSide, source: "thumbnail" });
   toggleTransition(chosenSide);
 }
 
@@ -3487,13 +3487,13 @@ function handleVibeSwitchKeydown(event) {
 
   event.preventDefault();
   const chosenSide = getLeftDragonSide(dragonLayout);
-  emitZahakEvent("choice", { chosenSide, source: "keyboard" });
+  emitTDHEvent("choice", { chosenSide, source: "keyboard" });
   toggleTransition(chosenSide);
 }
 
 function handleCanvasClick(event) {
   const chosenSide = getChosenSideFromPointer(event);
-  emitZahakEvent("choice", { chosenSide, source: "canvas" });
+  emitTDHEvent("choice", { chosenSide, source: "canvas" });
   toggleTransition(chosenSide);
 }
 
@@ -3506,13 +3506,13 @@ function handleVisibilityChange() {
   if (running) scheduleFrame();
 }
 
-function onZahakEvent(name, handler) {
+function onTDHEvent(name, handler) {
   const eventName = name.includes(":") ? name : `${WELCOME_CONFIG.eventPrefix}:${name}`;
   window.addEventListener(eventName, handler);
   return () => window.removeEventListener(eventName, handler);
 }
 
-function offZahakEvent(name, handler) {
+function offTDHEvent(name, handler) {
   const eventName = name.includes(":") ? name : `${WELCOME_CONFIG.eventPrefix}:${name}`;
   window.removeEventListener(eventName, handler);
 }
@@ -3527,7 +3527,7 @@ function openWelcome(options = {}) {
 
 function mountWelcome(options = {}) {
   if (options.mode) {
-    window.ZahakTransition.setMode(options.mode);
+    window.TDHTransition.setMode(options.mode);
   }
   if (options.fullscreen) {
     setVibeSwitchFocus(true, { instant: Boolean(options.instant) });
@@ -3539,11 +3539,11 @@ function mountWelcome(options = {}) {
       promptDelayMs: options.promptDelayMs,
     });
   }
-  emitZahakEvent("mount", { config: publicWelcomeConfig() });
-  return window.ZahakWelcome;
+  emitTDHEvent("mount", { config: publicWelcomeConfig() });
+  return window.TDHWelcome;
 }
 
-function destroyZahakWelcome() {
+function destroyTDHWelcome() {
   running = false;
   transition = null;
   clearDragonParticles();
@@ -3591,10 +3591,10 @@ function destroyZahakWelcome() {
   if (privateActionButton) {
     privateActionButton.removeEventListener("click", handlePrivateActionClick);
   }
-  emitZahakEvent("destroy");
+  emitTDHEvent("destroy");
 }
 
-window.ZahakTransition = {
+window.TDHTransition = {
   buildId: BUILD_ID,
   timing: TRANSITION_CHOREOGRAPHY,
   transitionMs: TRANSITION_MS,
@@ -3671,7 +3671,7 @@ window.ZahakTransition = {
   clearEffectProfile() {
     try {
       window.localStorage?.removeItem("cvc.fx");
-      window.localStorage?.removeItem("zahak.fx");
+      window.localStorage?.removeItem("tdh.fx");
     } catch {
       return false;
     }
@@ -3700,7 +3700,7 @@ window.ZahakTransition = {
       scheduleFrame();
       return;
     }
-    window.ZahakTransition.setSide(mode);
+    window.TDHTransition.setSide(mode);
   },
   setLayout(layout) {
     if (
@@ -3722,13 +3722,13 @@ window.ZahakTransition = {
   setInteractive,
 };
 
-window.ZahakWelcome = {
+window.TDHWelcome = {
   buildId: BUILD_ID,
   version: BUILD_ID,
   config: publicWelcomeConfig(),
   assets: getAssetManifest(),
   mount: mountWelcome,
-  destroy: destroyZahakWelcome,
+  destroy: destroyTDHWelcome,
   openWelcome,
   openFullscreen(options = {}) {
     setVibeSwitchFocus(true, { instant: Boolean(options.instant) });
@@ -3738,28 +3738,28 @@ window.ZahakWelcome = {
     setVibeSwitchFocus(false);
   },
   choose(side) {
-    emitZahakEvent("choice", { chosenSide: side, source: "api" });
+    emitTDHEvent("choice", { chosenSide: side, source: "api" });
     toggleTransition(side);
   },
   privateAction: triggerPrivateAction,
   blast: startPrivateBurst,
   setMode(mode) {
-    window.ZahakTransition.setMode(mode);
+    window.TDHTransition.setMode(mode);
   },
   setSide(side) {
-    window.ZahakTransition.setSide(side);
+    window.TDHTransition.setSide(side);
   },
   setLayout(layout) {
-    window.ZahakTransition.setLayout(layout);
+    window.TDHTransition.setLayout(layout);
   },
   getState() {
-    return window.ZahakTransition.getState();
+    return window.TDHTransition.getState();
   },
   getPerf() {
-    return window.ZahakTransition.getPerf();
+    return window.TDHTransition.getPerf();
   },
-  on: onZahakEvent,
-  off: offZahakEvent,
+  on: onTDHEvent,
+  off: offTDHEvent,
 };
 
 const resizeTarget = vibeSwitch || canvas;

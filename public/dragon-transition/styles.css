@@ -938,17 +938,17 @@ a {
   opacity: 0;
 }
 
-.vibe-overlay #zahak-bg {
+.vibe-overlay #tdh-bg {
   opacity: 0;
   transition: opacity 220ms ease;
 }
 
-.vibe-overlay.is-live #zahak-bg {
+.vibe-overlay.is-live #tdh-bg {
   opacity: 1;
 }
 
 .vibe-switch__frame,
-#zahak-bg {
+#tdh-bg {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -956,7 +956,7 @@ a {
   display: block;
 }
 
-#zahak-bg {
+#tdh-bg {
   background: #020205;
 }
 
