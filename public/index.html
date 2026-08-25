@@ -7,23 +7,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="./assets/logo/favicon-32.png?v=20260707-keyhole-logo-1" />
     <link rel="icon" type="image/png" sizes="64x64" href="./assets/logo/favicon-64.png?v=20260707-keyhole-logo-1" />
     <link rel="apple-touch-icon" href="./assets/logo/apple-touch-icon.png?v=20260707-keyhole-logo-1" />
-    <link rel="stylesheet" href="./dragon-transition/styles.css?v=20260707-onboarding-blast-1" />
     <link rel="stylesheet" href="./styles.css?v=20260708-tdh-brand-1" />
   </head>
   <body>
-    <canvas id="ambient-bg" data-tdh-ambient-canvas aria-hidden="true"></canvas>
-    <div
-      id="vibe-switch"
-      class="vibe-switch"
-      data-tdh-vibe-switch
-      role="button"
-      tabindex="0"
-      aria-label="Dragon role switch"
-    >
-      <span class="vibe-switch__frame" data-tdh-vibe-frame>
-        <canvas id="tdh-bg" data-tdh-scene-canvas aria-hidden="true"></canvas>
-      </span>
-    </div>
     <div class="app-shell" data-mode="combined">
       <aside class="sidebar">
         <div class="brand">
@@ -409,11 +395,10 @@
 
     <div id="app-help-modal" class="app-help-modal" hidden>
       <div class="app-help-backdrop" aria-hidden="true"></div>
-      <section class="app-help-dialog horn-panel" role="dialog" aria-modal="true" aria-labelledby="app-help-title">
+      <section class="app-help-dialog" role="dialog" aria-modal="true" aria-labelledby="app-help-title">
         <button id="app-help-close" class="app-help-close ghost" type="button" aria-label="Close help">Close</button>
         <div class="app-help-content">
-          <p id="app-help-title" class="app-help-title">Ha Ha Ha! Well met traveler!</p>
-          <p>We know learning dragon lore can be a bit much, so here's a translation to mortal human language:</p>
+          <p id="app-help-title" class="app-help-title">Welcome</p>
           <p class="app-help-line">
             <span class="app-help-icon" aria-hidden="true">🔑</span>
             <span>This is a lending protocol, but a bit different than what is out there already.</span>
@@ -428,8 +413,8 @@
           <p class="app-help-line">
             <span class="app-help-icon" aria-hidden="true">➡️</span>
             <span>
-              The idea is that a Borrower (Red Dragon) having vesting tokens can submit a confidential offer to borrow
-              against them, from a Lender (Blue Dragon) and if the Borrower defaults the Lender gets the tokens.
+              The idea is that a Borrower having vesting tokens can submit a confidential offer to borrow
+              against them, from a Lender, and if the Borrower defaults the Lender gets the tokens.
             </span>
           </p>
           <p class="app-help-line">
@@ -460,13 +445,6 @@
               </ol>
             </div>
           </div>
-          <p class="app-help-line">
-            <span class="app-help-icon" aria-hidden="true">❓</span>
-            <span>
-              <strong>Other notes:</strong> The dragon picture controls transitions between Borrower and Lender
-              perspectives.
-            </span>
-          </p>
         </div>
         <div class="app-help-footer">
           <label class="app-help-toggle">
@@ -483,18 +461,5 @@
     <script src="./wallet-config.js?v=20260706-metamask-ipad"></script>
     <script src="./vendor/cvc-metamask-wallet.js?v=20260706-metamask-ipad"></script>
     <script src="./app.js?v=20260708-credit-units-1"></script>
-    <script>
-      window.TDH_BUILD_ID = "cvc-dragon-shell-20260706";
-      window.TDH_CACHE_FLAG = window.TDH_BUILD_ID;
-      window.TDH_WELCOME_CONFIG = {
-        assetBaseUrl: "/dragon-transition/assets/",
-        autoStart: false,
-        initialFullscreen: true,
-        initialLore: true,
-        cacheBust: true,
-        eventPrefix: "tdh",
-      };
-    </script>
-    <script src="./dragon-transition/script.js?v=20260707-welcome-audio-1"></script>
   </body>
 </html>

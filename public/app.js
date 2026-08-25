@@ -149,10 +149,6 @@ let bundleDrag = null;
 let fieldRangeDrag = null;
 let discoveryPollTimer = null;
 let suppressBundleClick = false;
-let dragonRuntimeReady = false;
-let dragonWelcomeStarted = false;
-let initialWalletProbeComplete = false;
-let dragonChoicePending = false;
 let walletReconnectPausedUntil = 0;
 const collateralMetadataRequests = new Set();
 let appHelpOpenedThisSession = false;
@@ -319,7 +315,7 @@ function init() {
   }
   bindNavigation();
   bindActions();
-  bindDragonWelcome();
+  bindWalletEvents();
   loadDeploymentManifest();
   startDiscoveryPolling();
   probeInitialWalletConnection();
@@ -637,9 +633,8 @@ function bindSyncedAmountInputs(input, slider, stateKey) {
   slider.addEventListener("input", () => update(slider.value));
 }
 
-function setActiveRole(role, options = {}) {
+function setActiveRole(role) {
   if (role !== "borrower" && role !== "lender") return;
-  const settings = { syncDragon: true, ...options };
   state.role = role;
   const firstForRole = sortedRoleBundles(state.role)[0];
   state.activeBundleId = firstForRole?.bundleId ?? createBundle(state.role).bundleId;
@@ -647,68 +642,10 @@ function setActiveRole(role, options = {}) {
     el.bucketSideFilter.value = oppositeRole(role);
   }
   saveState();
-  if (settings.syncDragon) syncDragonModeToRole();
   render();
 }
 
-function setActiveRoleFromDragonSide(side, options = {}) {
-  const role = roleForDragonSide(side);
-  if (!role) return false;
-  if (state.role === role) {
-    if (options.renderWhenSame) render();
-    return true;
-  }
-  setActiveRole(role, options);
-  return true;
-}
-
-function bindDragonWelcome() {
-  window.CVCDragonApp = {
-    appBuildId: APP_BUILD_ID,
-    connectWalletForDragon: connectWalletForDragon,
-    debugLoanAction,
-    hasUsableWalletConnection,
-    setRoleFromDragonSide(side) {
-      setActiveRoleFromDragonSide(side, { syncDragon: true });
-    },
-  };
-
-  window.addEventListener("tdh:ready", () => {
-    dragonRuntimeReady = true;
-    syncDragonModeToRole();
-    void maybeStartDragonWelcome();
-  });
-
-  window.addEventListener("tdh:choice", (event) => {
-    const currentVibe = document.body.dataset.vibe;
-    const shouldTrustChoice = !currentVibe || currentVibe === "mixed" || event.detail?.source === "api";
-    if (shouldTrustChoice && setActiveRoleFromDragonSide(event.detail?.chosenSide, { syncDragon: false })) {
-      dragonChoicePending = false;
-    }
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      document.body.classList.add("dragon-entered");
-      maybeOpenAppHelpModal();
-    }
-  });
-
-  window.addEventListener("tdh:transition-start", (event) => {
-    setActiveRoleFromDragonSide(event.detail?.toMode ?? event.detail?.to, { syncDragon: false });
-  });
-
-  window.addEventListener("tdh:transition-end", (event) => {
-    dragonChoicePending = false;
-    setActiveRoleFromDragonSide(event.detail?.toMode ?? event.detail?.to, {
-      syncDragon: false,
-      renderWhenSame: true,
-    });
-    document.body.classList.add("dragon-entered");
-    maybeOpenAppHelpModal();
-  });
-
-  window.addEventListener("tdh:mode-change", (event) => {
-    setActiveRoleFromDragonSide(event.detail?.mode, { syncDragon: false, renderWhenSame: true });
-  });
-
+function bindWalletEvents() {
   window.addEventListener("cvc:wallet-change", (event) => {
     if (!event.detail) {
       handleWalletDisconnect();
@@ -758,7 +695,7 @@ async function disconnectWallet() {
 
   clearWalletConnection();
   renderContractConnection();
-  returnToDragonWelcome();
+  closeAppHelpModal();
   showToast("Wallet disconnected.", "good");
 
   try {
@@ -780,102 +717,17 @@ async function disconnectWallet() {
 function handleWalletDisconnect() {
   clearWalletConnection();
   renderContractConnection();
-  returnToDragonWelcome();
+  closeAppHelpModal();
 }
 
 function refreshWalletFromCurrentProvider() {
   if (Date.now() < walletReconnectPausedUntil) return;
-  void connectWallet({ requestAccounts: false, quiet: true }).then(() => {
-    void maybeStartDragonWelcome();
-  });
+  void connectWallet({ requestAccounts: false, quiet: true });
 }
 
 async function probeInitialWalletConnection() {
-  if (!window.ethereum) {
-    initialWalletProbeComplete = true;
-    void maybeStartDragonWelcome();
-    return;
-  }
+  if (!window.ethereum) return;
   await connectWallet({ requestAccounts: false, quiet: true });
-  initialWalletProbeComplete = true;
-  void maybeStartDragonWelcome();
-}
-
-async function maybeStartDragonWelcome() {
-  if (!dragonRuntimeReady) return;
-  syncDragonModeToRole();
-
-  if (hasUsableWalletConnection()) {
-    document.body.classList.add("dragon-entered");
-    maybeOpenAppHelpModal();
-    return;
-  }
-
-  if (!initialWalletProbeComplete && window.ethereum) return;
-
-  document.body.classList.remove("dragon-entered");
-  if (dragonWelcomeStarted || !window.TDHWelcome) return;
-  dragonWelcomeStarted = true;
-  window.TDHWelcome.openWelcome({ fullscreen: true, instant: true, promptDelayMs: 0 });
-}
-
-function returnToDragonWelcome() {
-  dragonChoicePending = false;
-  dragonWelcomeStarted = false;
-  document.body.classList.remove("dragon-entered");
-  closeAppHelpModal();
-  window.TDHTransition?.setMode?.("mixed");
-  window.TDHWelcome?.openWelcome?.({ fullscreen: true, instant: true, promptDelayMs: 0 });
-  dragonWelcomeStarted = Boolean(window.TDHWelcome);
-}
-
-async function connectWalletForDragon() {
-  const connected = await connectWallet({ forceRequest: true });
-  if (!connected) return false;
-  if (hasUsableWalletConnection()) {
-    dragonChoicePending = true;
-    syncDragonModeToRole();
-    return true;
-  }
-
-  const switched = await switchToManifestChain();
-  if (switched && hasUsableWalletConnection()) {
-    dragonChoicePending = true;
-    syncDragonModeToRole();
-    return true;
-  }
-
-  if (contractState.manifest?.chainId) {
-    showToast(`Switch wallet to chain ${contractState.manifest.chainId} before entering.`, "bad");
-  }
-  return false;
-}
-
-function syncDragonModeToRole() {
-  if (!window.TDHTransition) return;
-  if (dragonChoicePending) {
-    window.TDHTransition.setMode("mixed");
-    return;
-  }
-  if (hasUsableWalletConnection()) {
-    window.TDHTransition.setSide(dragonSideForRole(state.role));
-    return;
-  }
-  window.TDHTransition.setMode("mixed");
-}
-
-function roleForDragonSide(side) {
-  if (side === "red") return "borrower";
-  if (side === "blue") return "lender";
-  return null;
-}
-
-function visualDragonRole() {
-  return roleForDragonSide(document.body.dataset.vibe);
-}
-
-function dragonSideForRole(role) {
-  return role === "lender" ? "blue" : "red";
 }
 
 function activateView(target) {
@@ -907,11 +759,7 @@ function render() {
 }
 
 function shouldShowAppHelpOnStart() {
-  return Boolean(
-    contractState.account &&
-    document.body.classList.contains("dragon-entered") &&
-    !document.querySelector(".private-lore-modal"),
-  );
+  return Boolean(contractState.account && !document.querySelector(".private-lore-modal"));
 }
 
 function maybeOpenAppHelpModal() {
@@ -3756,7 +3604,6 @@ async function loadDeploymentManifest() {
     if (el.contractStatus) showToast("No generated deployment manifest found.", "bad");
   }
   render();
-  void maybeStartDragonWelcome();
 }
 
 async function connectWallet(options = {}) {
