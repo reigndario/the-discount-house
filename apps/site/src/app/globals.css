@@ -18,8 +18,8 @@
   --color-tdh-blue: var(--tdh-blue);
   --color-tdh-cream: var(--tdh-cream);
   --color-tdh-black: var(--tdh-black);
-  --font-sans: var(--font-space-grotesk);
-  --font-display: var(--font-space-grotesk);
+  --font-sans: var(--font-jost);
+  --font-display: var(--font-jost);
 }
 
 body {

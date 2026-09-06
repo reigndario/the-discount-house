@@ -56,6 +56,13 @@ const differentiators = [
 export default function Home() {
   return (
     <main className="flex flex-col">
+      {/* Wordmark: a real header, never overlaid on the photo */}
+      <header className="bg-black px-6 py-5 sm:px-10 sm:py-6">
+        <p className="text-tdh-cream font-bold tracking-tight text-lg sm:text-2xl uppercase">
+          The Discount House
+        </p>
+      </header>
+
       {/* Hero: sign photograph */}
       <section className="relative w-full aspect-[16/9] bg-black">
         <Image
@@ -65,11 +72,6 @@ export default function Home() {
           priority
           className="object-cover object-center"
         />
-        <div className="absolute top-6 left-6 sm:top-10 sm:left-10">
-          <p className="text-tdh-cream font-bold tracking-tight text-lg sm:text-2xl uppercase">
-            The Discount House
-          </p>
-        </div>
       </section>
 
       {/* Menu panel: reads as a continuation of the sign below it */}
