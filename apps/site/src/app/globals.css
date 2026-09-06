@@ -20,6 +20,7 @@
   --color-tdh-black: var(--tdh-black);
   --font-sans: var(--font-jost);
   --font-display: var(--font-staatliches);
+  --font-serif: var(--font-bodoni-moda);
 }
 
 body {

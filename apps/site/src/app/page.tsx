@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 type MenuItem = {
-  /** Short label printed on the sign — matched 2x2 under its icon cluster. */
+  /** Short label printed on the sign, matched 2x2 under its icon cluster. */
   label: string;
   href: string;
   description: string;
@@ -14,22 +14,22 @@ const menuItems: MenuItem[] = [
   {
     label: "Book",
     href: "/book",
-    description: "Confidential Preference Book — where borrowers and lenders discover each other.",
+    description: "Confidential Preference Book: where borrowers and lenders discover each other.",
   },
   {
     label: "Loans",
     href: "/loans",
-    description: "Loan Escrow — matched deals, funded and repaid confidentially.",
+    description: "Loan Escrow: matched deals, funded and repaid confidentially.",
   },
   {
     label: "Build",
     href: "/builder",
-    description: "Preference Builder — construct your ranked, encrypted terms.",
+    description: "Preference Builder: construct your ranked, encrypted terms.",
   },
   {
     label: "Docs",
     href: "/docs",
-    description: "Documentation — how the protocol actually works.",
+    description: "Documentation: how the protocol actually works.",
   },
 ];
 
@@ -42,7 +42,7 @@ const differentiators = [
   {
     color: "bg-tdh-yellow",
     title: "Bond-backed matching",
-    body: "Takers post a bond to attempt a match — probing the book for free isn't an option.",
+    body: "Takers post a bond to attempt a match, so probing the book for free isn't an option.",
   },
   {
     color: "bg-tdh-blue",
@@ -61,7 +61,7 @@ export default function Home() {
     <main className="flex flex-col">
       {/* Wordmark: a real header, never overlaid on the photo */}
       <header className="bg-black px-6 py-5 sm:px-10 sm:py-6">
-        <p className="font-display text-tdh-cream text-xl sm:text-3xl uppercase tracking-wide">
+        <p className="font-serif font-bold uppercase text-tdh-cream text-xl sm:text-3xl tracking-wide">
           The Discount House
         </p>
       </header>
@@ -96,13 +96,13 @@ export default function Home() {
       {/* Product intro / differentiators */}
       <section className="bg-tdh-black text-tdh-cream px-6 sm:px-10 py-16 sm:py-24">
         <div className="max-w-4xl mx-auto">
-          <h1 className="font-display text-4xl sm:text-6xl uppercase tracking-wide mb-6">
+          <h1 className="font-serif font-bold text-4xl sm:text-6xl uppercase tracking-wide mb-6">
             Private credit against vesting tokens
           </h1>
           <p className="text-base sm:text-lg opacity-80 mb-16 max-w-2xl">
             The Discount House is a confidential vesting-backed credit protocol. Borrowers and
             lenders publish encrypted ranked preferences, a matching engine finds bounded
-            negotiated terms, and successful matches settle into bilateral escrow — without
+            negotiated terms, and successful matches settle into bilateral escrow, without
             exposing either side&apos;s exact position.
           </p>
 

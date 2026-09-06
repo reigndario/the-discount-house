@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Jost, Staatliches } from "next/font/google";
+import { Bodoni_Moda, Jost, Staatliches } from "next/font/google";
 import "./globals.css";
 
 const jost = Jost({
@@ -14,6 +14,12 @@ const staatliches = Staatliches({
   weight: "400",
 });
 
+const bodoniModa = Bodoni_Moda({
+  variable: "--font-bodoni-moda",
+  subsets: ["latin"],
+  weight: ["500", "700", "900"],
+});
+
 export const metadata: Metadata = {
   title: "The Discount House",
   description:
@@ -24,7 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${jost.variable} ${staatliches.variable} h-full antialiased`}
+      className={`${jost.variable} ${staatliches.variable} ${bodoniModa.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-tdh-cream text-tdh-black">
         {children}
