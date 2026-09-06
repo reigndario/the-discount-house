@@ -63,7 +63,7 @@ export default function Home() {
         </p>
       </header>
 
-      {/* Hero: sign photograph */}
+      {/* Hero: sign photograph, with the menu printed directly on the sign's blank lower panel */}
       <section className="relative w-full aspect-[16/9] bg-black">
         <Image
           src="/sign-hero.png"
@@ -72,21 +72,19 @@ export default function Home() {
           priority
           className="object-cover object-center"
         />
-      </section>
-
-      {/* Menu panel: reads as a continuation of the sign below it */}
-      <section className="bg-tdh-cream border-b-4 border-tdh-black">
-        <nav aria-label="Primary" className="divide-y-2 divide-tdh-black/80">
+        <nav
+          aria-label="Primary"
+          className="absolute flex flex-col justify-between"
+          style={{ top: "50%", left: "39%", width: "22%", height: "19%" }}
+        >
           {menuItems.map((item) => (
             <Link
               key={item.name}
               href={item.href}
-              className="group flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-6 px-6 sm:px-10 py-6 sm:py-8 transition-colors hover:bg-tdh-black hover:text-tdh-cream"
+              className="font-bold uppercase text-tdh-black text-center leading-none hover:opacity-60"
+              style={{ fontSize: "clamp(0.5rem, 1.7vw, 1.4rem)" }}
             >
-              <span className="text-3xl sm:text-5xl font-bold uppercase tracking-tight shrink-0 sm:w-56">
-                {item.name}
-              </span>
-              <span className="text-sm sm:text-base opacity-80">{item.description}</span>
+              {item.name}
             </Link>
           ))}
         </nav>
