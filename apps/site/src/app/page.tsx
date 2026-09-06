@@ -2,29 +2,32 @@ import Image from "next/image";
 import Link from "next/link";
 
 type MenuItem = {
-  name: string;
+  /** Short label printed on the sign — matched 2x2 under its icon cluster. */
+  label: string;
   href: string;
   description: string;
 };
 
+// Order matters: CSS grid auto-placement (2 cols) fills left-to-right, top-to-bottom,
+// so this order must match the sign's icon layout: top-left, top-right, bottom-left, bottom-right.
 const menuItems: MenuItem[] = [
   {
-    name: "Book",
+    label: "Book",
     href: "/book",
     description: "Confidential Preference Book — where borrowers and lenders discover each other.",
   },
   {
-    name: "Builder",
-    href: "/builder",
-    description: "Preference Builder — construct your ranked, encrypted terms.",
-  },
-  {
-    name: "Loans",
+    label: "Loans",
     href: "/loans",
     description: "Loan Escrow — matched deals, funded and repaid confidentially.",
   },
   {
-    name: "Docs",
+    label: "Build",
+    href: "/builder",
+    description: "Preference Builder — construct your ranked, encrypted terms.",
+  },
+  {
+    label: "Docs",
     href: "/docs",
     description: "Documentation — how the protocol actually works.",
   },
@@ -58,7 +61,7 @@ export default function Home() {
     <main className="flex flex-col">
       {/* Wordmark: a real header, never overlaid on the photo */}
       <header className="bg-black px-6 py-5 sm:px-10 sm:py-6">
-        <p className="text-tdh-cream font-bold tracking-tight text-lg sm:text-2xl uppercase">
+        <p className="font-display text-tdh-cream text-xl sm:text-3xl uppercase tracking-wide">
           The Discount House
         </p>
       </header>
@@ -74,17 +77,17 @@ export default function Home() {
         />
         <nav
           aria-label="Primary"
-          className="absolute flex flex-col justify-between"
+          className="absolute grid grid-cols-2 gap-x-2 gap-y-1"
           style={{ top: "50%", left: "39%", width: "22%", height: "19%" }}
         >
           {menuItems.map((item) => (
             <Link
-              key={item.name}
+              key={item.label}
               href={item.href}
-              className="font-bold uppercase text-tdh-black text-center leading-none hover:opacity-60"
-              style={{ fontSize: "clamp(0.5rem, 1.7vw, 1.4rem)" }}
+              className="font-display uppercase tracking-wide text-tdh-black text-center leading-none hover:opacity-60"
+              style={{ fontSize: "clamp(0.5rem, 1.6vw, 1.3rem)" }}
             >
-              {item.name}
+              {item.label}
             </Link>
           ))}
         </nav>
@@ -93,7 +96,7 @@ export default function Home() {
       {/* Product intro / differentiators */}
       <section className="bg-tdh-black text-tdh-cream px-6 sm:px-10 py-16 sm:py-24">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl sm:text-5xl font-bold uppercase tracking-tight mb-6">
+          <h1 className="font-display text-4xl sm:text-6xl uppercase tracking-wide mb-6">
             Private credit against vesting tokens
           </h1>
           <p className="text-base sm:text-lg opacity-80 mb-16 max-w-2xl">
@@ -108,7 +111,7 @@ export default function Home() {
               <div key={d.title} className="flex gap-4">
                 <span aria-hidden="true" className={`mt-1.5 h-4 w-4 shrink-0 ${d.color}`} />
                 <div>
-                  <h2 className="font-bold uppercase tracking-tight mb-1">{d.title}</h2>
+                  <h2 className="font-display uppercase tracking-wide mb-1">{d.title}</h2>
                   <p className="text-sm opacity-75">{d.body}</p>
                 </div>
               </div>
