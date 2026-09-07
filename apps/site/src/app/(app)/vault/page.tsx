@@ -3,7 +3,7 @@ import { Eyebrow } from "@/components/Eyebrow";
 export default function VaultPage() {
   return (
     <div className="max-w-2xl">
-      <Eyebrow>Execution</Eyebrow>
+      <Eyebrow color="blue">Execution</Eyebrow>
       <h1 className="font-serif font-bold text-3xl sm:text-4xl mb-4">Vault</h1>
       <p className="text-tdh-black/70 mb-6">
         Loan Vault: matched deals settle into bilateral escrow, backed by TokenOps vesting

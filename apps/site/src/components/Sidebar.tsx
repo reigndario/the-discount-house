@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { APP_NAV, INFO_NAV, type NavItem } from "@/lib/nav";
+import { APP_NAV, INFO_NAV, NAV_COLOR_CLASS, type NavItem } from "@/lib/nav";
 
 function NavGroup({ label, items, pathname }: { label: string; items: NavItem[]; pathname: string }) {
   return (
@@ -14,13 +14,14 @@ function NavGroup({ label, items, pathname }: { label: string; items: NavItem[];
       <ul className="flex flex-col gap-0.5">
         {items.map((item) => {
           const active = pathname === item.href;
+          const colors = NAV_COLOR_CLASS[item.color];
           return (
             <li key={item.href}>
               <Link
                 href={item.href}
                 className={`block px-3 py-2 text-sm font-semibold uppercase tracking-wide border-l-2 ${
                   active
-                    ? "border-tdh-red text-tdh-cream bg-tdh-cream/5"
+                    ? `${colors.sidebarBorder} text-tdh-cream bg-tdh-cream/5`
                     : "border-transparent text-tdh-cream/60 hover:text-tdh-cream hover:bg-tdh-cream/5"
                 }`}
               >
@@ -40,7 +41,7 @@ export function Sidebar() {
   return (
     <aside className="w-56 shrink-0 bg-tdh-black text-tdh-cream flex flex-col gap-8 px-3 py-6 min-h-screen">
       <Link href="/" className="px-3 font-serif font-bold uppercase text-lg tracking-wide">
-        The Discount House
+        TDH
       </Link>
       <NavGroup label="App" items={APP_NAV} pathname={pathname} />
       <NavGroup label="Info" items={INFO_NAV} pathname={pathname} />
