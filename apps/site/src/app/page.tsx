@@ -16,19 +16,9 @@ const menuItems: MenuItem[] = [
   { label: "Docs", href: "/docs" },
 ];
 
-// The sign hero photo isn't composed for phone dimensions yet. Until there's a real mobile
-// landing design, skip it entirely on small screens and drop straight into the app.
-// Plain inline script (not a React effect) so it runs before the desktop-only hero paints.
-const MOBILE_REDIRECT_SCRIPT = `
-  if (window.innerWidth < 768) {
-    window.location.replace("/book");
-  }
-`;
-
 export default function Home() {
   return (
     <main className="flex flex-col">
-      <script dangerouslySetInnerHTML={{ __html: MOBILE_REDIRECT_SCRIPT }} />
       {/* Wordmark: a real header, never overlaid on the photo */}
       <header className="bg-black px-6 py-5 sm:px-10 sm:py-6">
         <p className="font-serif font-bold uppercase text-tdh-cream text-xl sm:text-3xl tracking-wide">
@@ -36,8 +26,8 @@ export default function Home() {
         </p>
       </header>
 
-      {/* Hero: sign photograph, with the menu printed directly on the sign's blank lower panel */}
-      <section className="relative w-full aspect-[16/9] bg-black">
+      {/* Desktop hero: sign photograph, menu printed directly on the sign's blank lower panel */}
+      <section className="relative hidden sm:block w-full aspect-[16/9] bg-black">
         <Image
           src="/sign-hero.png"
           alt="The Discount House"
@@ -61,6 +51,27 @@ export default function Home() {
             </Link>
           ))}
         </nav>
+      </section>
+
+      {/* Mobile hero: portrait composition. The menu labels don't fit legibly at this size, so
+          the sign's own logo mark is the single tap target into the app instead. */}
+      <section className="relative sm:hidden w-full aspect-[941/1672] bg-black">
+        <Image
+          src="/sign-hero-mobile.png"
+          alt="The Discount House"
+          fill
+          priority
+          className="object-cover object-center"
+        />
+        <Link
+          href="/book"
+          aria-label="Enter The Discount House"
+          className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center"
+          style={{ left: "49.5%", top: "69%", width: "16vw", height: "16vw" }}
+        >
+          <span className="absolute inset-0 rounded-full bg-tdh-yellow/40 animate-ping" />
+          <span className="absolute inset-0 rounded-full border-2 border-tdh-yellow" />
+        </Link>
       </section>
     </main>
   );
