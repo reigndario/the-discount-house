@@ -17,14 +17,14 @@ const menuItems: MenuItem[] = [
     description: "Confidential Preference Book: where borrowers and lenders discover each other.",
   },
   {
-    label: "Loans",
-    href: "/loans",
-    description: "Loan Escrow: matched deals, funded and repaid confidentially.",
+    label: "Vault",
+    href: "/vault",
+    description: "Loan Vault: matched deals, funded and repaid confidentially.",
   },
   {
-    label: "Build",
-    href: "/builder",
-    description: "Preference Builder: construct your ranked, encrypted terms.",
+    label: "Desk",
+    href: "/desk",
+    description: "Preference Desk: construct your ranked, encrypted terms.",
   },
   {
     label: "Docs",
