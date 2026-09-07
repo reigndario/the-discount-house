@@ -47,8 +47,8 @@ export default function Home() {
         />
         <nav
           aria-label="Primary"
-          className="absolute grid grid-cols-2 gap-x-2 gap-y-1"
-          style={{ top: "50%", left: "39%", width: "22%", height: "19%" }}
+          className="absolute grid grid-cols-2 gap-x-2 content-between"
+          style={{ top: "52.5%", left: "39%", width: "22%", height: "20%" }}
         >
           {menuItems.map((item) => (
             <Link
