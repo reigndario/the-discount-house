@@ -8,7 +8,7 @@ export function Eyebrow({
   color?: NavColor;
   children: React.ReactNode;
 }) {
-  const colorClass = color ? NAV_COLOR_CLASS[color].text : "text-tdh-black/50";
+  const colorClass = color ? NAV_COLOR_CLASS[color].text : "text-foreground/50";
   return (
     <p className={`text-xs font-semibold uppercase tracking-wide mb-1 ${colorClass}`}>
       {children}

@@ -9,7 +9,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [navOpen, setNavOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-tdh-cream text-tdh-black">
+    <div className="flex min-h-screen bg-background text-foreground">
       {navOpen ? (
         <button
           type="button"

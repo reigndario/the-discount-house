@@ -34,9 +34,9 @@ export const NAV_COLOR_CLASS: Record<
   },
   blue: { border: "border-tdh-blue", text: "text-tdh-blue", bg: "bg-tdh-blue", sidebarBorder: "border-tdh-blue" },
   black: {
-    border: "border-tdh-black",
-    text: "text-tdh-black",
-    bg: "bg-tdh-black",
+    border: "border-foreground",
+    text: "text-foreground",
+    bg: "bg-foreground",
     sidebarBorder: "border-tdh-cream",
   },
 };
