@@ -3,7 +3,7 @@ export type NavColor = "red" | "yellow" | "blue" | "black";
 export type NavItem = {
   label: string;
   href: string;
-  /** Bauhaus accent tied to this section's identity (active nav state, eyebrow labels). */
+  /** Bauhaus accent tied to this section's identity (used on its Eyebrow label). */
   color: NavColor;
 };
 
@@ -19,24 +19,11 @@ export const INFO_NAV: NavItem[] = [{ label: "Docs", href: "/docs", color: "blac
 
 export const ALL_NAV: NavItem[] = [...APP_NAV, ...INFO_NAV];
 
-export const NAV_COLOR_CLASS: Record<
-  NavColor,
-  { border: string; text: string; bg: string; sidebarBorder: string }
-> = {
-  // `sidebarBorder` differs from `border` only for black: the sidebar itself is black, so a
-  // black active-indicator would be invisible against it — cream stands in there instead.
-  red: { border: "border-tdh-red", text: "text-tdh-red", bg: "bg-tdh-red", sidebarBorder: "border-tdh-red" },
-  yellow: {
-    border: "border-tdh-yellow",
-    text: "text-tdh-yellow",
-    bg: "bg-tdh-yellow",
-    sidebarBorder: "border-tdh-yellow",
-  },
-  blue: { border: "border-tdh-blue", text: "text-tdh-blue", bg: "bg-tdh-blue", sidebarBorder: "border-tdh-blue" },
-  black: {
-    border: "border-foreground",
-    text: "text-foreground",
-    bg: "bg-foreground",
-    sidebarBorder: "border-tdh-cream",
-  },
+// "black" tracks --foreground (not a literal color) so it stays legible against the
+// theme-flipped content background in dark mode, rather than rendering invisible-dark text.
+export const NAV_COLOR_CLASS: Record<NavColor, { text: string }> = {
+  red: { text: "text-tdh-red" },
+  yellow: { text: "text-tdh-yellow" },
+  blue: { text: "text-tdh-blue" },
+  black: { text: "text-foreground" },
 };
