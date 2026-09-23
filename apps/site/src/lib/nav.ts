@@ -12,6 +12,7 @@ export const APP_NAV: NavItem[] = [
   { label: "Book", href: "/book", color: "red" },
   { label: "Desk", href: "/desk", color: "yellow" },
   { label: "Vault", href: "/vault", color: "blue" },
+  { label: "ATP", href: "/atp", color: "black" },
 ];
 
 /** Reference/info links, shown under the sidebar's "INFO" group. */

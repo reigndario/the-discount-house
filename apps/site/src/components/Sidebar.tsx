@@ -39,7 +39,7 @@ export function Sidebar() {
 
   return (
     <aside className="w-56 shrink-0 bg-tdh-blue text-tdh-cream flex flex-col gap-8 px-3 py-6 min-h-screen">
-      <Link href="/" className="px-3 font-serif font-bold uppercase text-lg tracking-wide">
+      <Link href="/" className="px-3 font-bold uppercase text-lg tracking-wide">
         TDH
       </Link>
       <NavGroup label="App" items={APP_NAV} pathname={pathname} />

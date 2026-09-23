@@ -27,7 +27,7 @@ export default function DocsPage() {
   return (
     <div className="max-w-3xl">
       <Eyebrow color="black">Reference</Eyebrow>
-      <h1 className="font-serif font-bold text-3xl sm:text-4xl mb-4">Docs</h1>
+      <h1 className="font-bold text-3xl sm:text-4xl mb-4">Docs</h1>
       <p className="text-foreground/70 mb-6">
         Documentation on how the protocol actually works: matching, bonds, vesting-backed
         collateral, and confidential settlement.
@@ -36,7 +36,7 @@ export default function DocsPage() {
         Coming soon
       </p>
 
-      <h2 className="font-serif font-bold text-2xl sm:text-3xl mb-4">
+      <h2 className="font-bold text-2xl sm:text-3xl mb-4">
         Private credit against vesting tokens
       </h2>
       <p className="text-foreground/70 mb-10 max-w-2xl">
@@ -51,7 +51,7 @@ export default function DocsPage() {
           <div key={d.title} className="flex gap-4">
             <span aria-hidden="true" className={`mt-1.5 h-4 w-4 shrink-0 ${d.color}`} />
             <div>
-              <h3 className="font-display uppercase tracking-wide mb-1">{d.title}</h3>
+              <h3 className="font-medium uppercase tracking-wide mb-1">{d.title}</h3>
               <p className="text-sm text-foreground/70">{d.body}</p>
             </div>
           </div>
