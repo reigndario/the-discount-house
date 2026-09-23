@@ -5,8 +5,8 @@ import { HomeIndex } from "@/components/HomeIndex";
 export default function Home() {
   return (
     <main className="flex flex-1 flex-col px-4 py-6 sm:px-10 sm:py-8">
-      {/* Logo centred over the wordmark, and the pair centred on the page. The negative margin
-          cancels the tracking's trailing space after the final E, so centring is measured against
+      {/* Logo centered over the wordmark, and the pair centered on the page. The negative margin
+          cancels the tracking's trailing space after the final E, so centering is measured against
           the visible letters. */}
       <div className="flex w-fit flex-col items-center gap-3 self-center">
         <Image
@@ -21,7 +21,7 @@ export default function Home() {
           The Discount House
         </p>
       </div>
-      {/* Top-anchored, not vertically centred, so the grid never shifts as the disclosure text changes length. */}
+      {/* Top-anchored, not vertically centered, so the grid never shifts as the disclosure text changes length. */}
       <div className="flex flex-1 justify-center pt-10 pb-10 sm:pt-[12vh] sm:pb-16">
         <HomeIndex />
       </div>
