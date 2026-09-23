@@ -11,7 +11,7 @@
 }
 
 /* Dark mode: content surfaces flip (background/foreground swap). The always-dark chrome
-   (sidebar, homepage hero) uses the literal --tdh-black/--tdh-cream tokens above, unaffected. */
+   (sidebar) uses the literal --tdh-black/--tdh-cream tokens above, unaffected. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --background: #0d0d0d;
