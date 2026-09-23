@@ -5,10 +5,10 @@ import { HomeIndex } from "@/components/HomeIndex";
 export default function Home() {
   return (
     <main className="flex flex-1 flex-col px-4 py-6 sm:px-10 sm:py-8">
-      {/* Logo centred over the wordmark; the pair is centred on phones and top-left from sm up.
-          The negative margin cancels the tracking's trailing space after the final E, so centring
-          is measured against the visible letters. */}
-      <div className="flex w-fit flex-col items-center gap-3 self-center sm:self-start">
+      {/* Logo centred over the wordmark, and the pair centred on the page. The negative margin
+          cancels the tracking's trailing space after the final E, so centring is measured against
+          the visible letters. */}
+      <div className="flex w-fit flex-col items-center gap-3 self-center">
         <Image
           src="/tdh-logo.png"
           alt=""
