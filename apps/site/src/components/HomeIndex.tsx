@@ -22,8 +22,15 @@ const BUNDLE = {
   counts: { public: 7, encrypted: 30 },
 };
 
+// The protocol-wide privacy model (docs/ARCHITECTURE.md), and where Docs sends people to learn it.
+const PROTOCOL = {
+  caption: "What the protocol makes public",
+  publicItems: "Coarse market buckets, match success or failure, transaction timing",
+  encryptedItems: "Every preference, the agreed loan terms, repayment state, all amounts",
+};
+
 const DISCLOSURES: Record<"default" | GlyphName, Disclosure> = {
-  default: { caption: "What a Preference Bundle makes public", ...BUNDLE },
+  default: PROTOCOL,
   borrow: { caption: "What is public when you borrow", ...BUNDLE },
   lend: { caption: "What is public when you lend", ...BUNDLE },
   atp: {
@@ -31,14 +38,14 @@ const DISCLOSURES: Record<"default" | GlyphName, Disclosure> = {
     publicItems: "Fund NAV, published once per epoch",
     encryptedItems: "Your deposit, your share, the fund's positions",
   },
-  docs: { caption: "What a Preference Bundle makes public", ...BUNDLE },
+  docs: PROTOCOL,
 };
 
 const ENTRIES: { glyph: GlyphName; label: string; href: string; preview: boolean }[] = [
   { glyph: "borrow", label: "Borrow", href: "/desk?side=borrower", preview: true },
   { glyph: "lend", label: "Lend", href: "/desk?side=lender", preview: true },
   { glyph: "atp", label: "ATP", href: "/atp", preview: true },
-  // Docs has no disclosure of its own, so on touch it opens straight away.
+  // Docs' disclosure is already the resting state, so on touch it opens straight away.
   { glyph: "docs", label: "Docs", href: "/docs", preview: false },
 ];
 
@@ -68,7 +75,7 @@ export function HomeIndex() {
   const active = hovered ?? selected;
   const disclosure = DISCLOSURES[active ?? "default"];
   const selectedEntry = ENTRIES.find((entry) => entry.glyph === selected);
-  // ATP has no on-chain shape yet, so its public side is drawn as a sliver, not a ratio.
+  // Without a real count (ATP, protocol-wide), the public side is a sliver, not a ratio.
   const publicShare = disclosure.counts
     ? disclosure.counts.public / (disclosure.counts.public + disclosure.counts.encrypted)
     : 0.04;
