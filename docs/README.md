@@ -159,6 +159,7 @@ See:
 - `docs/INTEGRATION_RISKS.md`
 - `docs/LIVE_MATCH_ORCHESTRATION.md`
 - `docs/PRE_TESTNET_RUNBOOK.md`
+- `docs/FAQ.md` (user questions: vesting token markets, haircuts, reference pricing)
 
 ## Security Notes
 

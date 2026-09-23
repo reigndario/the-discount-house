@@ -142,6 +142,7 @@ See:
 - `docs/ARCHITECTURE.md`
 - `docs/INTEGRATION_RISKS.md`
 - `docs/PRE_TESTNET_RUNBOOK.md`
+- `docs/FAQ.md` (user questions: vesting token markets, haircuts, reference pricing)
 
 ## Security Notes
 
