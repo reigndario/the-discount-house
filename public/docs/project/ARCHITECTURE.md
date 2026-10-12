@@ -11,8 +11,8 @@ quality.
   ceiling bucket, ASCII duration ceiling bucket, expiry/status, and backing IDs needed for execution readiness. Bucket
   labels are opaque fixed ASCII bytes32 values such as `P<000150` and `D<000720`; the contracts use them for coarse
   routing only and do not parse exact min-max terms. Exact ranges, targets, direction, and priority are fhEVM handles.
-  Lender executable readiness is checked through the configured credit
-  adapter's commitment verifier rather than a book-local hash alone.
+  Lender executable readiness is checked through the configured credit adapter's commitment verifier rather than a
+  book-local hash alone.
 - `BondManager`: economic defense against preference probing.
 - `NashNegotiationEngine`: execute-only matching over executable Preference Bundles. It accepts caller-supplied
   candidate IDs for gas bounds, verifies opposite-side/same-market/executable status, chooses the oldest executable

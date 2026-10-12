@@ -5,14 +5,14 @@ the protocol should be locally coherent before it touches public infrastructure.
 
 ## Critical Wallet Policy
 
-Never use the Hardhat default mnemonic (`test test test test test test test test test test test junk`) on Sepolia or
-any public network. It is a public, documented test mnemonic and all derived addresses must be treated as compromised
+Never use the Hardhat default mnemonic (`test test test test test test test test test test test junk`) on Sepolia or any
+public network. It is a public, documented test mnemonic and all derived addresses must be treated as compromised
 outside isolated local chains. This includes deployers, operators, borrower/lender smoke actors, demo wallets, faucets,
 and admin wallets.
 
 The default mnemonic is acceptable only for local disposable networks such as `hardhat`, `localhost`, or `anvil`.
-Sepolia work requires a fresh private project mnemonic or private key. If a deployed public-network contract is owned
-by a default-derived address, migrate ownership/roles/funds to a non-default wallet before continuing public-network
+Sepolia work requires a fresh private project mnemonic or private key. If a deployed public-network contract is owned by
+a default-derived address, migrate ownership/roles/funds to a non-default wallet before continuing public-network
 operations. `hardhat.config.ts` intentionally refuses `--network sepolia` when the configured mnemonic is the Hardhat
 default.
 

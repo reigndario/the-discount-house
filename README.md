@@ -2,17 +2,16 @@
 
 # The Discount House
 
-A confidential vesting-backed credit protocol built with Zama fhEVM, OpenZeppelin Confidential Contracts,
-ERC-7984 confidential tokens, and TokenOps confidential vesting integration.
+A confidential vesting-backed credit protocol built with Zama fhEVM, OpenZeppelin Confidential Contracts, ERC-7984
+confidential tokens, and TokenOps confidential vesting integration.
 
 The first deployment target is local development and Sepolia testnet.
 
 ## What This Builds
 
-A confidential preference book for private credit against vesting positions. Borrowers and lenders publish
-coarse public discovery metadata plus encrypted ranked preferences. A taker posts a bond, attempts a bounded
-negotiation against the opposite side of the book, and successful matches proceed into bilateral escrow before
-activation.
+A confidential preference book for private credit against vesting positions. Borrowers and lenders publish coarse public
+discovery metadata plus encrypted ranked preferences. A taker posts a bond, attempts a bounded negotiation against the
+opposite side of the book, and successful matches proceed into bilateral escrow before activation.
 
 Core properties:
 
@@ -44,11 +43,15 @@ Validated on Sepolia:
 
 - Fresh non-default-wallet core deployment and read-only wiring checks
 - TokenOps CTTT manager creation through the official TokenOps factory
-- TokenOps CTTT vesting custody, pledge registration, release, zero vesting ID compatibility, and unpledged custody recovery
-- ERC-7984 `cUSDCMock` correct-amount and wrong-amount callback handling, public-decryption finalization, retry, consumption, reusable lender credit custody, funding, repayment, and public unwrap/finalize into underlying `USDCMock`
+- TokenOps CTTT vesting custody, pledge registration, release, zero vesting ID compatibility, and unpledged custody
+  recovery
+- ERC-7984 `cUSDCMock` correct-amount and wrong-amount callback handling, public-decryption finalization, retry,
+  consumption, reusable lender credit custody, funding, repayment, and public unwrap/finalize into underlying `USDCMock`
 - Browser-style encrypted Preference Bundle submission through the relayer proof path
-- Encrypted match execution, selected-term computation, aggregate feasibility finalization, settlement coordinator escrow creation, matched escrow repayment, and failed-match bond slashing
-- Post-rotation end-to-end smoke test: lender escrowed confidential cUSDC, loan activated, borrower unwrapped exactly `1000` `USDCMock`
+- Encrypted match execution, selected-term computation, aggregate feasibility finalization, settlement coordinator
+  escrow creation, matched escrow repayment, and failed-match bond slashing
+- Post-rotation end-to-end smoke test: lender escrowed confidential cUSDC, loan activated, borrower unwrapped exactly
+  `1000` `USDCMock`
 
 Reference / deferred:
 
@@ -69,9 +72,8 @@ npm test
 npm run demo:local
 ```
 
-`npm run demo:local` executes the protocol path without testnet: create borrower/lender preference bundles, run
-bounded matching, post/refund a bond, create a loan escrow, register mock TokenOps collateral, fund, activate,
-and repay.
+`npm run demo:local` executes the protocol path without testnet: create borrower/lender preference bundles, run bounded
+matching, post/refund a bond, create a loan escrow, register mock TokenOps collateral, fund, activate, and repay.
 
 ## Local Deployment Smoke Test
 
@@ -107,16 +109,16 @@ npm run deploy:localhost
 npm run manifest:localhost
 ```
 
-The manifest command writes `public/deployment-manifest.json` for local UI/SDK wiring. That generated file is
-ignored by git; `public/deployment-manifest.example.json` defines the checked-in schema.
+The manifest command writes `public/deployment-manifest.json` for local UI/SDK wiring. That generated file is ignored by
+git; `public/deployment-manifest.example.json` defines the checked-in schema.
 
 ## Browser Preview
 
 The browser-testable UI lives in `public/`. It supports borrower/lender perspective switching, ranked preference
 construction, bucket discovery, bond quote calculation, and contract-aware builder submission. It loads
-`public/deployment-manifest.json` and can submit the active builder bundle to `ConfidentialPreferenceBook` when
-a wallet is connected on the manifest chain. Sepolia loan settlement controls that still require mock collateral
-or mock credit are disabled rather than routed to those mocks.
+`public/deployment-manifest.json` and can submit the active builder bundle to `ConfidentialPreferenceBook` when a wallet
+is connected on the manifest chain. Sepolia loan settlement controls that still require mock collateral or mock credit
+are disabled rather than routed to those mocks.
 
 Serve it with:
 
@@ -148,9 +150,9 @@ See:
 
 This code is unaudited and is not for production use.
 
-This repository uses the official Zama Hardhat template. Local Hardhat tests use the Zama mock runtime, while
-Sepolia testing exercises real fhEVM network behavior. Any feature that relies on ACLs, encrypted comparison,
-relayer behavior, or gateway decryption must be validated on Sepolia before public demonstration.
+This repository uses the official Zama Hardhat template. Local Hardhat tests use the Zama mock runtime, while Sepolia
+testing exercises real fhEVM network behavior. Any feature that relies on ACLs, encrypted comparison, relayer behavior,
+or gateway decryption must be validated on Sepolia before public demonstration.
 
-The dependency tree currently includes npm audit findings inherited from the upstream template and ecosystem
-packages. They are tracked as launch blockers until resolved, upgraded, or explicitly risk-accepted.
+The dependency tree currently includes npm audit findings inherited from the upstream template and ecosystem packages.
+They are tracked as launch blockers until resolved, upgraded, or explicitly risk-accepted.

@@ -43,7 +43,7 @@ Chain ID: `11155111`
 | `DemoUsdToken`               | `0x83859862d63AaDC97e0C402A7775a765243e06Cd` | Demo-only ERC20-style token/faucet   |
 | `DemoVestingToken`           | `0x9602c3f254223De12966c288c1258d8CA96518e2` | Demo-only collateral token           |
 | `DemoTokenOpsVestingFactory` | `0x0cC870E49Ca4f861b14285Db099c06f70B82395a` | Demo-only TokenOps-shaped manager    |
-| `DemoCreditFaucet`           | skipped on current Sepolia manifest           | Demo wrapper around mock credit path |
+| `DemoCreditFaucet`           | skipped on current Sepolia manifest          | Demo wrapper around mock credit path |
 
 ### Manifest Assets
 
@@ -71,14 +71,14 @@ Validation roles:
 
 Key result:
 
-- TokenOps vesting ID `0x0000000000000000000000000000000000000000000000000000000000000000` was created for
-  the borrower and moved into `TokenOpsVestingAdapter` custody.
+- TokenOps vesting ID `0x0000000000000000000000000000000000000000000000000000000000000000` was created for the borrower
+  and moved into `TokenOpsVestingAdapter` custody.
 - Lender wrapped and escrowed exactly `1000` `cUSDCMock` against commitment hash
   `0x8b12984fd51dfaebeeac84004ec340a8e298b9391feec05fc8a03ae7becfb696`.
 - Encrypted match feasibility publicly decrypted to `true`.
 - `MatchSettlementCoordinator` created escrow `0x8b18E8C6D2B4D37d1C79Fa17C105E43F70A7a425`.
-- Loan activation tx `0x5a9e01be438715042faeba9ac5444f5016f8d1ae48b13e4cfe77a85554b754eb` released borrowed
-  confidential cUSDC to the borrower.
+- Loan activation tx `0x5a9e01be438715042faeba9ac5444f5016f8d1ae48b13e4cfe77a85554b754eb` released borrowed confidential
+  cUSDC to the borrower.
 - Borrower unwrapped exactly `1000` borrowed cUSDC:
   - unwrap tx `0xff2bb3bf1ee962e249b258d332af2937268ab1cb7836d4540545c5110ed1c015`
   - public decrypt amount: `1000`

@@ -23,7 +23,8 @@ This is the cold-start demo path for a user who does not change any default bund
 3. Connect the borrower wallet in MetaMask.
 4. Click `Choose`.
 5. Click on the RED DRAGON.
-6. Confirm you are in the RED DRAGON (Borrower) perspective by the red hues in the UI and also the RED DRAGON is active in the thumbnail in the top right.
+6. Confirm you are in the RED DRAGON (Borrower) perspective by the red hues in the UI and also the RED DRAGON is active
+   in the thumbnail in the top right.
 
 ## 2. Borrower Onboards Vesting Collateral
 
@@ -38,14 +39,17 @@ This is the cold-start demo path for a user who does not change any default bund
    - `Custody`
 7. Confirm the status reads `Collateral Onboarded Successfully`.
 
-
 ## 3. Borrower Publishes the Default Offer Bundle
-In this step you are building your confidential negotiation preferences. For best chance of matching with the other side of the order book, leave the sliders alone.
+
+In this step you are building your confidential negotiation preferences. For best chance of matching with the other side
+of the order book, leave the sliders alone.
 
 1. Click `Builder`.
-2. You should see a bunch of pre-filled preferences. IF NOT, in `Preference Bundles (ranked)`, select the top borrower bundle, usually `Best Case`.
+2. You should see a bunch of pre-filled preferences. IF NOT, in `Preference Bundles (ranked)`, select the top borrower
+   bundle, usually `Best Case`.
 3. Confirm `Collateral asset` points to the demo collateral just onboarded (remember the name you used!).
-4. Do not change the default sliders or priority polygon the first time. Once you figure the app out you can play with the defalut strategies later.
+4. Do not change the default sliders or priority polygon the first time. Once you figure the app out you can play with
+   the defalut strategies later.
 5. Click `Publish Private Offer`.
 6. The `Publish Private Offer` modal opens. Sign transactions as requested while the modal advances through:
    - `Bundle`
@@ -58,7 +62,6 @@ In this step you are building your confidential negotiation preferences. For bes
    borrower bucket under `Coarse Discovery Buckets`.
 
 `Save Local Order` is not required for this flow. Bundle ordering is browser-local only.
-
 
 ## 4. Switch to the Lender Wallet and Blue Dragon
 
@@ -77,8 +80,8 @@ If using the same wallet for both roles, you can instead use the dragon role swi
 2. In `Lender Capital`, click `Shield cUSDC`.
 3. In Zama Portfolio, connect the lender wallet on Sepolia.
 4. If the lender wallet does not have cUSDC, use the Zama Portfolio faucet/mint flow for demo cUSDC.
-5. Shield enough cUSDC for the default lender escrow amount. The default app amount is set from the top lender bundle and
-   is expected to be around `100` cUSDC.
+5. Shield enough cUSDC for the default lender escrow amount. The default app amount is set from the top lender bundle
+   and is expected to be around `100` cUSDC.
 6. Return to the app.
 7. Click `Check shielded cUSDC`.
 8. Continue only after the readiness area says a shielded `cUSDC` handle was detected.
@@ -97,12 +100,16 @@ If using the same wallet for both roles, you can instead use the dragon role swi
 7. Confirm `Commitment` and `Latest escrow` are no longer `None`.
 
 ## 7. Lender Publishes the Default Offer Bundle
-In this step you are building your confidential negotiation preferences. For best chance of matching with the other side of the order book, leave the sliders alone.
+
+In this step you are building your confidential negotiation preferences. For best chance of matching with the other side
+of the order book, leave the sliders alone.
 
 1. Click `Builder`.
-2. If you don't see a bunch of pre-populated preferences in `Preference Bundles (ranked)`, select the top lender bundle, usually `Senior Supply`.
-3. Select the `Collateral asset` that matches the borrower demo collateral market name you chose earlier. The dropdown should show the borrower token
-   name/address and vesting manager if the same browser session saw the borrower onboarding. REMEMBER THE NAME YOU USED!!
+2. If you don't see a bunch of pre-populated preferences in `Preference Bundles (ranked)`, select the top lender bundle,
+   usually `Senior Supply`.
+3. Select the `Collateral asset` that matches the borrower demo collateral market name you chose earlier. The dropdown
+   should show the borrower token name/address and vesting manager if the same browser session saw the borrower
+   onboarding. REMEMBER THE NAME YOU USED!!
 4. Do not change the default sliders or priority polygon the first time. It's really an advanced feature.
 5. Click `Publish Private Offer`.
 6. In the `Publish Private Offer` modal, sign transactions as requested while it advances through:
@@ -152,12 +159,12 @@ At this point the borrower side should have received the borrowed confidential c
 
 There is no in-app unshield button in the current UI.
 
-1. Switch back to the borrower wallet. 
+1. Switch back to the borrower wallet.
 2. Open `https://portfolio.zama.org/shield`.
 3. Connect the borrower wallet on Sepolia.
 4. Use the Zama Portfolio unshield/unwrap flow for `cUSDC`.
-5. Unshield the borrowed amount shown in your local escrow terms, if available. If the app only has indexed on-chain data,
-   exact economics may show as encrypted and you should use the amount expected from the demo defaults.
+5. Unshield the borrowed amount shown in your local escrow terms, if available. If the app only has indexed on-chain
+   data, exact economics may show as encrypted and you should use the amount expected from the demo defaults.
 
 ## Optional Full Lifecycle
 
@@ -170,7 +177,7 @@ borrower drawdown and unshielding.
 - `Publish Private Offer` blocks with a capital message: go back to `Demo Utils` and complete the role-specific
   prerequisite first.
 - `Check shielded cUSDC` reports no handle: use `Shield cUSDC`, complete shielding in Zama Portfolio, then retry.
-- `Execute Against Bucket` is disabled: verify both offers are `Executable`, both use the same collateral market, and the
-  target bucket is the opposite side.
-- `Credit Funding` or `Activate` appears to do nothing: keep the wallet unlocked and check MetaMask activity/pop-up state;
-  the UI should also show a notice in `Selected Escrow`.
+- `Execute Against Bucket` is disabled: verify both offers are `Executable`, both use the same collateral market, and
+  the target bucket is the opposite side.
+- `Credit Funding` or `Activate` appears to do nothing: keep the wallet unlocked and check MetaMask activity/pop-up
+  state; the UI should also show a notice in `Selected Escrow`.
