@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 type Theme = "light" | "dark";
 
@@ -30,22 +30,34 @@ function MoonIcon() {
   );
 }
 
-export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme | null>(null);
+// The theme lives on <html data-theme>, falling back to the OS preference; read it as an external store so the
+// toggle stays in sync without setting state inside an effect.
+function subscribe(onChange: () => void) {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  const media = window.matchMedia("(prefers-color-scheme: dark)");
+  media.addEventListener("change", onChange);
+  return () => {
+    observer.disconnect();
+    media.removeEventListener("change", onChange);
+  };
+}
 
-  useEffect(() => {
-    const attr = document.documentElement.getAttribute("data-theme") as Theme | null;
-    if (attr === "light" || attr === "dark") {
-      setTheme(attr);
-      return;
-    }
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    setTheme(prefersDark ? "dark" : "light");
-  }, []);
+function getTheme(): Theme {
+  const attr = document.documentElement.getAttribute("data-theme");
+  if (attr === "light" || attr === "dark") return attr;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function getServerTheme(): Theme | null {
+  return null;
+}
+
+export function ThemeToggle() {
+  const theme = useSyncExternalStore(subscribe, getTheme, getServerTheme);
 
   function toggle() {
     const next: Theme = theme === "dark" ? "light" : "dark";
-    setTheme(next);
     document.documentElement.setAttribute("data-theme", next);
     try {
       localStorage.setItem("theme", next);

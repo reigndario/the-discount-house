@@ -1985,7 +1985,14 @@ async function ensureDemoCollateralPair(options = {}) {
   return { tokenAddress, managerAddress };
 }
 
-function recordLenderCapital({ commitmentHash, commitmentExpiry, amount, chainAmount, creditAdapter, onboardingRunId }) {
+function recordLenderCapital({
+  commitmentHash,
+  commitmentExpiry,
+  amount,
+  chainAmount,
+  creditAdapter,
+  onboardingRunId,
+}) {
   const existing = (state.demoUtils.lenderCapital ?? []).find(
     (record) => record.commitmentHash && record.commitmentHash.toLowerCase() === commitmentHash.toLowerCase(),
   );
@@ -5554,7 +5561,7 @@ function priorityLevel(bundle, key) {
   return clampPriority(Number(bundle.priority[key] ?? 3));
 }
 
-function priorityDefaults(role) {
+function priorityDefaults(_role) {
   return {
     collateralAmount: 4,
     principal: 5,
