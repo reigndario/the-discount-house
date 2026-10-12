@@ -104,5 +104,7 @@ Supporting layers:
 - `contracts/demo`, `contracts/mocks`, `contracts/interfaces` — demo-only contracts, test mocks
   (`MockConfidentialCreditAdapter`, `cUSDCMock`, `USDCMock`, TokenOps manager mock), and external interfaces.
 
+Roadmap: `TDH.md` at the repo root lists every phase and its checklist; tick items there as they land.
+
 Docs worth reading before non-trivial changes: `docs/ARCHITECTURE.md`, `docs/INTEGRATION_RISKS.md`,
 `docs/PRE_TESTNET_RUNBOOK.md`, `docs/LIVE_MATCH_ORCHESTRATION.md`, `docs/UI_LOAN_FLOW_WALKTHROUGH.md`.

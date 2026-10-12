@@ -1,5 +1,7 @@
 # SCAFFOLDING.md
 
+> **Superseded by [`TDH.md`](../TDH.md)** (2026-10-12), which holds the current phases and checklists. Kept for history.
+
 > Generated: 2026-08-25 Project: The Discount House (confidential-vesting-credit) Stack: Solidity 0.8.27 / Hardhat /
 > Zama fhEVM / OpenZeppelin Confidential Contracts / ERC-7984 / TokenOps SDK / TypeScript / vanilla JS browser UI
 > Current state: Core protocol contracts, TypeScript SDK, and browser UI are implemented and pass local mock-runtime
