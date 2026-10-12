@@ -35,7 +35,8 @@ public demo or wider testnet exposure.
 | Hardhat mock-runtime test suite | ✅ Done | One test file per core contract plus SDK surface tests in `test/` |
 | Sepolia smoke scripts | ✅ Done | 9 scripts in `scripts/sepolia-*` covering credit, commitment, unwrap, wrong-amount, collateral, escrow, match settlement, failed match, preferences |
 | TypeScript protocol SDK | ✅ Done | `src/protocolSdk.ts`, built to `dist/`, exported as `./protocol-sdk` |
-| Browser UI | 🔧 Partial | Book/Builder/Loans/System pages implemented in `public/`; encrypted submission and role-aware match/escrow flows exist but are not yet manually validated end-to-end with a real wallet |
+| Browser UI (dev/wallet-testing harness) | 🔧 Partial | Book/Builder/Loans/System pages implemented in `public/`; encrypted submission and role-aware match/escrow flows exist but are not yet manually validated end-to-end with a real wallet |
+| Product site (`apps/site`) | 🔧 Partial | Next.js app with the minimal homepage shipped; its sections are named Book/Desk/Vault/ATP/Docs (Desk and Vault are the product names for the harness's Builder and Loans) and are placeholders until the chat interface lands. Phase 1 below tests the `public/` harness, so it keeps the Builder/Loans names |
 | Local deployment tooling | ✅ Done | `deploy:hardhat`/`deploy:localhost`/`deploy:sepolia`, tagged `Core`/`Demo`, manifest writer |
 | Sepolia deployment | ✅ Done | Full core stack deployed and addressed in `docs/PRE_TESTNET_RUNBOOK.md`, post-rotation wallet |
 | Durable indexing | ❌ Missing | UI currently relies on a lookback event cache, not durable indexing |
