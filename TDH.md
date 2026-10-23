@@ -1,6 +1,6 @@
 # TDH.md: The Discount House Roadmap
 
-Last updated: 2026-10-12
+Last updated: 2026-10-23
 
 This is the single list of what we are building and in what order. It replaces the checklists in `docs/SCAFFOLDING.md`
 and the "TDH Chat Interface, ATP and PWA: Implementation Plan" doc (2026-09-23), and adds the Desk agent. Tick items
@@ -18,8 +18,10 @@ pages.
 
 ## Rules every phase follows
 
-1. **No plaintext bundle content goes to a hosted LLM.** Amounts, collateral, duration and rate targets stay in the
-   browser until they are encrypted.
+1. **No plaintext bundle content goes to a hosted LLM that TDH runs or chooses.** Amounts, collateral, duration and rate
+   targets stay in the browser until they are encrypted. The local skill (Phase 3b) is the one exception by design: it
+   runs in the user's own agent, so the text goes to whatever model provider the user has chosen. The skill and its docs
+   say so plainly.
 2. **Nothing is submitted straight from parsed text.** The user confirms a plain-language recap of the exact object
    first, for bundles and ATP deposits and withdrawals alike.
 3. **Encrypted paths are done only after a Sepolia smoke test passes.** Local mock tests are not proof.
@@ -33,6 +35,7 @@ pages.
 | 1   | Harness validation on Sepolia       | ⏳     | 0             | You, by wallet  |
 | 2   | SDK consolidation                   | ⏳     | 0             | Code            |
 | 3   | Intent core                         | ⏳     | 2             | Code            |
+| 3b  | Bundle interview skill (local)      | ⏳     | 3             | Code            |
 | 4   | Desk: chat interface                | ⏳     | 3             | Code            |
 | 5   | Desk: confirmation and submission   | ⏳     | 4             | Code + Sepolia  |
 | 6   | Desk agent: questions and guidance  | ⏳     | 4             | Code            |
@@ -41,7 +44,8 @@ pages.
 | 9   | PWA: offline shell and device tests | ⏳     | 4             | Code + phones   |
 | 10  | Hardening and audit                 | ⏳     | Before launch | Code + external |
 
-Phase 1 runs alongside everything else. Phase 6 can start as soon as the Desk chat shell exists (Phase 4) and does not
+Phase 1 runs alongside everything else. Phase 3b and Phase 4 can run in parallel once Phase 3 lands, so the skill can be
+demoed before the web chat is finished. Phase 6 can start as soon as the Desk chat shell exists (Phase 4) and does not
 wait for Phase 5. Parts of Phase 10 can be done any time.
 
 ---
@@ -112,6 +116,25 @@ Migrating `public/app.js` itself to these helpers is optional and comes after De
 Extraction runs in the browser with a deterministic parser. It asks a question instead of guessing. A small in-browser
 model may be added later behind the same `extract` interface, but it can only propose values, never write them.
 
+## Phase 3b: Bundle interview skill (local) ⏳
+
+**Goal:** the same drafting brain, distributed as an agent skill anyone can install and run locally, alongside the
+site's Desk chat, so both technical and non-technical users are served. Both channels share the Phase 3 intent core, so
+the intent core must stay free of React and browser dependencies.
+
+- [ ] `skills/bundle-interview/SKILL.md`: interview behavior, one question at a time, never guesses a value
+- [ ] Small CLI wrapper around the intent core and SDK: validates a draft and emits the canonical bundle JSON and its
+      `canonicalBundleHash`
+- [ ] The skill never holds keys and never signs, encrypts or submits; it only produces the bundle JSON
+- [ ] Hosted path (default): the user imports the bundle JSON into the site's review step (Phase 5)
+- [ ] Local signing page (optional): the same review and signing page packaged to run on localhost. The skill downloads
+      it from a tagged GitHub release (never `main`) and verifies a pinned checksum before launching it
+- [ ] The review and wallet-approval gate lives in the page, never in the LLM; the page recomputes the hash and requires
+      a confirmation the agent cannot give
+- [ ] Install and usage docs, including the note that text goes to the user's own model provider
+- [ ] Reuses the Phase 6 knowledge base for questions about the products
+- [ ] Demo: test the finished skill end to end, from interview to a signed bundle
+
 ## Phase 4: Desk, chat interface ⏳
 
 **Goal:** `/desk` becomes a working chat that drafts bundles locally. Desk is one agent with two capabilities: drafting
@@ -140,6 +163,8 @@ model may be added later behind the same `extract` interface, but it can only pr
 - [ ] Confirming stores `canonicalBundleHash`; submission recomputes it and refuses on mismatch
 - [ ] Accurate risk copy: the taker posts the bond, and a wrong bundle can be matched into a loan on the wrong terms
 - [ ] The accent color appears only in the review state
+- [ ] "Import from skill" path: load a bundle JSON from the Phase 3b skill into the same review state; the hash is
+      recomputed on import and the gate is identical to a chat-drafted bundle
 - [ ] Tests that a hash mismatch or a post-confirm edit blocks submission
 - [ ] Manual end-to-end run on Sepolia
 
@@ -171,7 +196,7 @@ How it stays private (proposal, see open decision D1):
 Checklist:
 
 - [ ] Decide D1 (hosted model vs local-only answers) and the provider
-- [ ] Curated knowledge base from the docs and FAQ, versioned in the repo
+- [ ] Curated knowledge base from the docs and FAQ, versioned in the repo and shared with the Phase 3b skill
 - [ ] Product-fit interview flow with quick-reply chips
 - [ ] Readiness checks from public on-chain reads
 - [ ] "What next" guidance driven by the user's current flow state
