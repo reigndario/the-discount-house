@@ -19,6 +19,7 @@ export default tseslint.config(
       "dist/**",
       "node_modules/**",
       "public/vendor/**",
+      "skills/*/bin/**",
       "types/**",
       "*.env",
       "*.log",

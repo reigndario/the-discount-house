@@ -93,6 +93,7 @@
     "prettier:write": "prettier --write \"**/*.{js,json,md,sol,ts,yml}\"",
     "test": "hardhat test",
     "test:ui": "node scripts/ui-smoke.mjs",
+    "build:skill": "node scripts/build-skill.mjs",
     "build:wallet": "esbuild src/metamask-wallet.js --bundle --format=iife --global-name=CVCMetaMaskWalletBundle --outfile=public/vendor/cvc-metamask-wallet.js --target=es2020 --platform=browser --legal-comments=none --minify",
     "test:sepolia": "hardhat test --network sepolia",
     "demo:local": "hardhat run scripts/local-protocol-demo.ts --network hardhat",
