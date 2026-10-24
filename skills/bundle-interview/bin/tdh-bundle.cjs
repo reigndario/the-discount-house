@@ -3860,7 +3860,7 @@ function ask(field, draft, side) {
     return {
       done: false,
       slot: min,
-      question: `You said about ${fmt(vTarget)} for the ${label}. Is that exact, or is there a lowest and highest you would accept?`,
+      question: `${label[0].toUpperCase()}${label.slice(1)}: about ${fmt(vTarget)}. Exact, or a range?`,
       quickReplies: [
         {
           label: `Exactly ${fmt(vTarget)}`,
@@ -3879,14 +3879,14 @@ function ask(field, draft, side) {
     return {
       done: false,
       slot: min,
-      question: `What is the lowest ${label} you would accept? (${unit})`,
+      question: `Lowest ${label}? (${unit})`,
       quickReplies: [{ label: `Same as the highest (${fmt(vMax)})`, event: { type: "set", slot: min, value: vMax } }]
     };
   }
   return {
     done: false,
     slot: max,
-    question: `What is the highest ${label} you would accept? (${unit})`,
+    question: `Highest ${label}? (${unit})`,
     quickReplies: [
       {
         label: `Same as the lowest (${fmt(vMin)})`,
@@ -3936,7 +3936,7 @@ function nextTurn(draft) {
     return {
       done: false,
       slot: null,
-      question: `I read "${c.span.text}" as a number but could not tell which term it belongs to. Which is it?`,
+      question: `What is "${c.span.text}"?`,
       quickReplies: BUNDLE_FIELDS.map((field) => ({
         label: FIELD_LABELS[field].label,
         event: { type: "assign_unresolved", index: unknown, slot: fieldSlot(field, bound) }

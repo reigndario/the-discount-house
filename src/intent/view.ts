@@ -7,8 +7,9 @@ import {
   type PlainPriority,
   type PlainSide,
 } from "../protocolSdk";
+import { validateDraft } from "./policy";
 import { draftIntent } from "./reducer";
-import { BUNDLE_FIELDS, fieldSlot, type DraftBundle } from "./types";
+import { BUNDLE_FIELDS, fieldSlot, splitFieldSlot, type DraftBundle } from "./types";
 
 /** What the diagram shows for one row. `empty` has no values; `default` has only defaults; otherwise `stated`. */
 export type RowState = "empty" | "stated" | "default";
@@ -20,6 +21,8 @@ export type DiagramRow = {
   /** Whether this value is public on-chain or encrypted. The exact range and target are always encrypted. */
   visibility: "public" | "encrypted";
   state: RowState;
+  /** True when the values contradict each other (a minimum above the maximum, a target outside the range). */
+  problem?: boolean;
   /** For a side or an amount row, the plain text value. */
   text?: string;
   min?: number;
@@ -73,6 +76,7 @@ export function diagramRows(draft: DraftBundle): DiagramRow[] {
     ];
   }
 
+  const problems = new Set(validateDraft(draft).map((i) => splitFieldSlot(i.slot)?.field));
   const side = draft.slots.side?.value as PlainSide | undefined;
   const defaults = side ? defaultsForSide(side) : undefined;
   const rows: DiagramRow[] = [
@@ -95,6 +99,7 @@ export function diagramRows(draft: DraftBundle): DiagramRow[] {
       label: LABELS[field].label,
       unit: LABELS[field].unit,
       visibility: "encrypted",
+      problem: problems.has(field),
       state: present.length === 0 ? "empty" : present.every((s) => s!.source === "default") ? "default" : "stated",
       min: num(0),
       max,

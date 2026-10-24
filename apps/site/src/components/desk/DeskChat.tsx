@@ -19,20 +19,19 @@ import {
 import { DraftDiagram } from "@/components/desk/DraftDiagram";
 import { Glyph, type GlyphName } from "@/components/Glyph";
 
-type Entry = { id: number; role: "desk" | "you"; text: string; recap?: string[]; replies?: QuickReply[] };
+type Entry = { id: number; role: "desk" | "you"; text: string; done?: boolean; replies?: QuickReply[] };
 
 type State = { draft: DraftBundle; entries: Entry[]; expecting?: SlotKey; nextId: number };
 
-const INTRO = "Drafting happens in this browser. Nothing you type here is sent anywhere.";
-const NOT_UNDERSTOOD = "I could not find a value I can use in that.";
+const NOT_UNDERSTOOD = "I did not catch a value in that.";
 
 function deskEntry(id: number, turn: Turn, prefix?: string): Entry {
   if (turn.done) {
     return {
       id,
       role: "desk",
-      text: [prefix, "That is everything I need. Here is what I have:"].filter(Boolean).join(" "),
-      recap: turn.summary,
+      text: [prefix, "Draft complete. Nothing has been sent."].filter(Boolean).join(" "),
+      done: true,
     };
   }
   return { id, role: "desk", text: [prefix, turn.question].filter(Boolean).join(" "), replies: turn.quickReplies };
@@ -48,8 +47,7 @@ function start(side: string | null): State {
     draft = reduce(draft, { type: "set", slot: "side", value: side, source: "picked" });
   }
   const turn = nextTurn(draft);
-  const prefix = side === "borrower" || side === "lender" ? `${INTRO} You are ${side === "borrower" ? "borrowing" : "lending"}.` : INTRO;
-  return { draft, entries: [deskEntry(1, turn, prefix)], expecting: expectingOf(turn), nextId: 2 };
+  return { draft, entries: [deskEntry(1, turn)], expecting: expectingOf(turn), nextId: 2 };
 }
 
 function glyphFor(reply: QuickReply): GlyphName | null {
@@ -60,12 +58,20 @@ function glyphFor(reply: QuickReply): GlyphName | null {
   return null;
 }
 
+// Each chip takes its section's Bauhaus color on hover, so the marks keep the homepage's identity.
+const CHIP_HOVER: Record<GlyphName, string> = {
+  borrow: "hover:bg-tdh-red hover:text-tdh-cream hover:border-tdh-red",
+  lend: "hover:bg-tdh-blue hover:text-tdh-cream hover:border-tdh-blue",
+  atp: "hover:bg-tdh-yellow hover:text-tdh-black hover:border-tdh-yellow",
+  docs: "hover:bg-foreground hover:text-background",
+};
+
 function Chip({ children, glyph, ...rest }: React.ComponentProps<"button"> & { glyph?: GlyphName | null }) {
   return (
     <button
       type="button"
       {...rest}
-      className="flex items-center gap-2 rounded-none border border-foreground px-3 py-2 text-sm font-medium uppercase tracking-[0.15em] hover:bg-foreground hover:text-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+      className={`flex items-center gap-2 rounded-none border-2 border-foreground px-3 py-2 text-sm font-medium uppercase tracking-[0.15em] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground ${CHIP_HOVER[glyph ?? "docs"]}`}
     >
       {glyph ? <Glyph name={glyph} className="h-4 w-4" /> : null}
       {children}
@@ -137,22 +143,18 @@ export function DeskChat() {
       <section aria-label="Conversation" className="min-w-0">
         <ol aria-live="polite" className="border-b border-foreground/30">
           {state.entries.map((entry) => (
-            <li key={entry.id} className="grid grid-cols-[3.5rem_1fr] gap-4 border-t border-foreground/30 py-4 sm:grid-cols-[4.5rem_1fr]">
+            <li
+              key={entry.id}
+              className="grid grid-cols-[3.5rem_1fr] gap-4 border-t border-foreground/30 py-4 sm:grid-cols-[4.5rem_1fr]"
+            >
               <span className="pt-0.5 text-xs font-light uppercase tracking-[0.2em]">
                 {entry.role === "desk" ? "Desk" : "You"}
               </span>
               <div>
                 <p className={entry.role === "you" ? "font-medium" : "font-light"}>{entry.text}</p>
-                {entry.recap ? (
-                  <ul className="mt-3 space-y-1 text-sm font-light">
-                    {entry.recap.map((line) => (
-                      <li key={line}>{line}</li>
-                    ))}
-                  </ul>
-                ) : null}
-                {entry.recap ? (
-                  <p className="mt-3 text-sm font-light">
-                    Review and submission are not built yet, so nothing has been sent. You can keep editing, or{" "}
+                {entry.done ? (
+                  <p className="mt-2 text-sm font-light">
+                    Keep editing, or{" "}
                     <button
                       type="button"
                       onClick={() => setState(start(null))}
@@ -173,7 +175,7 @@ export function DeskChat() {
                     {entry === last && fresh ? (
                       <Link
                         href="/docs"
-                        className="flex items-center gap-2 border border-foreground px-3 py-2 text-sm font-medium uppercase tracking-[0.15em] hover:bg-foreground hover:text-background"
+                        className={`flex items-center gap-2 border-2 border-foreground px-3 py-2 text-sm font-medium uppercase tracking-[0.15em] ${CHIP_HOVER.docs}`}
                       >
                         <Glyph name="docs" className="h-4 w-4" />
                         Docs
@@ -203,15 +205,16 @@ export function DeskChat() {
             onChange={(e) => setText(e.target.value)}
             autoComplete="off"
             placeholder="Type your answer"
-            className="min-w-0 flex-1 rounded-none border border-foreground bg-transparent px-3 py-3 font-light placeholder:text-foreground/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+            className="min-w-0 flex-1 rounded-none border-2 border-foreground bg-transparent px-3 py-3 font-light placeholder:text-foreground/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
           />
           <button
             type="submit"
-            className="rounded-none border border-foreground bg-foreground px-5 py-3 text-sm font-medium uppercase tracking-[0.15em] text-background hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
+            className="rounded-none border-2 border-foreground bg-foreground px-5 py-3 text-sm font-medium uppercase tracking-[0.15em] text-background hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
           >
             Send
           </button>
         </form>
+        <p className="mt-3 text-xs font-light text-foreground/60">Drafted in your browser. Nothing is sent.</p>
       </section>
 
       <aside className="min-w-0">
