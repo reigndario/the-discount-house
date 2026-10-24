@@ -240,6 +240,14 @@ describe("diagram rows", () => {
     expect(rows.interestPercent.state).to.equal("empty");
   });
 
+  it("flags a contradictory range as a problem, and only that row", () => {
+    const draft = applyMessage(emptyDraft(), "borrow at least 200k usdc and at most 100k usdc");
+    const rows = Object.fromEntries(diagramRows(draft).map((r) => [r.key, r]));
+    expect(rows.principal.problem).to.equal(true);
+    expect(rows.collateralAmount.problem).to.equal(false);
+    expect(rows.gracePeriodDays.problem).to.equal(false);
+  });
+
   it("shows side defaults for direction and priority, labeled as defaults", () => {
     const draft = reduce(emptyDraft(), { type: "set", slot: "side", value: "lender" });
     const row = diagramRows(draft).find((r) => r.key === "principal")!;
