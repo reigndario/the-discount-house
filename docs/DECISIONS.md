@@ -28,6 +28,7 @@ Status: **Accepted** (agreed and in the roadmap or code) · **Proposed** (made i
 | D-016 | Split Phase 4: 4a chat UI, 4b wallet and relayer           | 4a      | Accepted |
 | D-017 | The site imports the intent core from source               | 4a      | Proposed |
 | D-018 | The diagram shows default direction and priority           | 4a      | Proposed |
+| D-019 | Desk uses the site palette; color marks state              | 4a      | Proposed |
 
 ---
 
@@ -350,3 +351,33 @@ diagram is meant to show what will be submitted.
 hiding them would hide part of what they confirm.
 
 **Rejected.** _Leave them off until they can be edited._ The recap would then omit values that are submitted.
+
+### D-019: Desk uses the site palette; color marks state
+
+**Status:** Proposed · **Date:** 2026-10-24
+
+**Context.** The first Desk build followed the roadmap's monochrome rule (black, cream, no accent except in the review
+state). Seen on screen, the draft panel read as busy and flat: every row repeated words such as "encrypted", "default"
+and "target", and nothing separated what the user had said from what Desk had filled in.
+
+**Decision.** Desk uses the site's Bauhaus palette. In the draft diagram, color replaces most of the words: blue is a
+value the user stated, yellow is a default, red is a contradiction, and a dashed outline is empty. The circle on each
+bar is the target. A small legend explains a filled square (encrypted) and an open square (public) once, instead of a
+label on every row. Values are compact (`80k – 120k USDC`), empty rows show only a dashed bar, and the chat no longer
+repeats the draft in a recap list. The sidebar keeps its blue, the section label is yellow, and the entry chips take
+their section's color on hover. This replaces two roadmap items: "monochrome Desk" and "accent color only in the review
+state". The review state should instead be visually distinct, because it is the only state that can lead to a signature.
+
+**Why.** Color that means something does the work of words, and a phone screen has little room for words. Keeping the
+site's palette also makes Desk feel like the rest of the product.
+
+**Rejected.**
+
+- _Stay monochrome and only trim the words._ Fixes the clutter, but loses the at-a-glance difference between stated and
+  default values, which matters because defaults are part of what the user confirms (D-010).
+- _Use color only in the review state._ Leaves the drafting screen flat, and a user who has seen color everywhere else
+  would read a sudden accent as decoration, not as a signal.
+
+**Consequence.** Red means "contradiction" on Desk but is also Book's section color elsewhere. They never share a
+screen, but it is worth watching. The "public" and "encrypted" words now live in the legend and in screen-reader labels,
+not on each row.

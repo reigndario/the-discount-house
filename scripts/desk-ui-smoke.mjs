@@ -83,14 +83,15 @@ try {
         `${name} chip`,
       );
     }
-    assert.match(await transcript(), /Nothing you type here is sent anywhere/);
+    assert.match(await page.locator("main").innerText(), /Drafted in your browser\. Nothing is sent\./);
+    assert.ok(await page.locator("section[aria-label='Your draft']").getByText("Encrypted").isVisible(), "legend");
   });
 
   await check("?side= pre-fills the side", async () => {
     await page.goto(`${base}/desk?side=lender`);
     await page.waitForSelector("#desk-input");
-    assert.match(await transcript(), /You are lending/);
-    assert.match(await page.locator("section[aria-label='Your draft']").innerText(), /lender/);
+    assert.match(await transcript(), /How much do you want to lend/);
+    assert.match(await page.locator("section[aria-label='Your draft']").innerText(), /lender/i);
   });
 
   await check("drafts a bundle from plain language, one question at a time", async () => {
@@ -102,30 +103,29 @@ try {
     await say("5% to 8%");
     await say("about 90 days");
     await page.getByRole("button", { name: "Exactly 90" }).click();
-    await page.getByText("That is everything I need").waitFor();
+    await page.getByText("Draft complete. Nothing has been sent.").waitFor();
     const text = await transcript();
-    assert.match(text, /grace period: 0 to 15 days, target 7 \(default\)/);
-    assert.match(text, /nothing has been sent/);
+    assert.doesNotMatch(text, /target 6\.5/, "the chat no longer repeats the draft");
     const diagram = await page.locator("section[aria-label='Your draft']").innerText();
     assert.match(diagram, /Loan amount/);
-    assert.match(diagram, /Public bucket: P<250000/);
-    assert.match(diagram, /default/i);
+    assert.match(diagram, /P<250000/);
+    assert.match(diagram, /80k – 120k/);
   });
 
   await check("asks instead of guessing when a number has no unit", async () => {
     await page.goto(`${base}/desk`);
     await page.waitForSelector("#desk-input");
     await say("borrow 100k");
-    await page.getByText(/could not tell which term it belongs to/).waitFor();
+    await page.getByText('What is "100k"?').waitFor();
     await page.getByRole("button", { name: "loan amount" }).click();
-    assert.match(await page.locator("section[aria-label='Your draft']").innerText(), /target 100,000/);
+    assert.match(await page.locator("section[aria-label='Your draft']").innerText(), /100k/);
   });
 
   await check("says so when it finds nothing usable", async () => {
     await page.goto(`${base}/desk`);
     await page.waitForSelector("#desk-input");
     await say("hello there");
-    await page.getByText("I could not find a value I can use in that.").waitFor();
+    await page.getByText("I did not catch a value in that.").waitFor();
   });
 
   await check("nothing leaves the origin and nothing is stored but the theme", async () => {
@@ -161,15 +161,29 @@ try {
     }
   });
 
-  await check("Desk drops the colored sidebar", async () => {
-    const bg = (p) =>
-      p
-        .locator("aside")
-        .first()
-        .evaluate((el) => getComputedStyle(el).backgroundColor);
-    assert.equal(await bg(page), "rgb(13, 13, 13)");
-    await page.goto(`${base}/book`);
-    assert.notEqual(await bg(page), "rgb(13, 13, 13)");
+  await check("color carries state: blue stated, yellow default, red problem", async () => {
+    const fills = async () =>
+      page
+        .locator("section[aria-label='Your draft'] li div.absolute.inset-y-0")
+        .evaluateAll((els) => els.map((el) => getComputedStyle(el).backgroundColor));
+    await page.goto(`${base}/desk`);
+    await page.waitForSelector("#desk-input");
+    await say("borrow between 80k and 120k usdc");
+    const colors = await fills();
+    assert.ok(colors.includes("rgb(28, 63, 148)"), `stated fill should be blue: ${colors}`);
+    assert.ok(colors.includes("rgb(244, 195, 0)"), `default fill should be yellow: ${colors}`);
+    await page.goto(`${base}/desk`);
+    await page.waitForSelector("#desk-input");
+    await say("borrow at least 200k usdc and at most 100k usdc");
+    assert.ok((await fills()).includes("rgb(224, 48, 30)"), "a contradictory range should be red");
+  });
+
+  await check("Desk keeps the site's blue sidebar", async () => {
+    const bg = await page
+      .locator("aside")
+      .first()
+      .evaluate((el) => getComputedStyle(el).backgroundColor);
+    assert.equal(bg, "rgb(28, 63, 148)");
   });
 
   await check("fits a phone screen with no sideways scroll", async () => {

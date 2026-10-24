@@ -147,11 +147,11 @@ is the wallet connector, relayer SDK build, CSP, collateral picker and the Hardh
 - [x] Sharp-cornered input and buttons, no shadows
 - [x] Entry chips from the homepage glyphs (Borrow, Lend, ATP, Docs); `?side=` from the homepage pre-fills the side
 - [x] Diagram panel: one row per field, ranges as bars with a target tick, empty / stated / default states, priority as
-      five squares, "public" or "encrypted" label on every row
+      five squares, a public or encrypted marker on every row with a legend
 - [ ] Collateral picker from the wallet's on-chain positions (custodied vesting or escrowed cUSDC)
 - [ ] Wallet connector (viem) and `@zama-fhe/relayer-sdk` browser build in `apps/site`; check COOP/COEP headers
 - [ ] Content Security Policy limiting outgoing connections to the RPC and the relayer
-- [x] Desk route drops the colored sidebar accents so the monochrome rule holds
+- [x] Desk uses the site palette, and color marks state in the diagram: blue stated, yellow default, red problem (D-019)
 - [x] Transcript and draft live in memory only; nothing written to `localStorage`
 - [x] No analytics or session replay on Desk or ATP routes
 - [ ] Playwright test against local Hardhat (4b; `npm run test:desk-ui` already covers the 4a UI with no chain)
@@ -165,7 +165,8 @@ is the wallet connector, relayer SDK build, CSP, collateral picker and the Hardh
 - [ ] Plain-language copy for every field, with defaults called out ("You didn't state a grace period. Using 7 days.")
 - [ ] Confirming stores `canonicalBundleHash`; submission recomputes it and refuses on mismatch
 - [ ] Accurate risk copy: the taker posts the bond, and a wrong bundle can be matched into a loan on the wrong terms
-- [ ] The accent color appears only in the review state
+- [ ] The review state is visually distinct, since it is the only state that can lead to a signature (replaces the
+      monochrome rule, D-019)
 - [ ] "Import from skill" path: load a bundle JSON from the Phase 3b skill into the same review state; the hash is
       recomputed on import and the gate is identical to a chat-drafted bundle
 - [ ] Tests that a hash mismatch or a post-confirm edit blocks submission
