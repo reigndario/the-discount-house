@@ -38,7 +38,12 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-56 shrink-0 bg-tdh-blue text-tdh-cream flex flex-col gap-8 px-3 py-6 min-h-screen">
+    // Desk drops the colored chrome so the monochrome rule holds there.
+    <aside
+      className={`w-56 shrink-0 text-tdh-cream flex flex-col gap-8 px-3 py-6 min-h-screen ${
+        pathname === "/desk" ? "bg-tdh-black border-r border-tdh-cream/20" : "bg-tdh-blue"
+      }`}
+    >
       <Link href="/" className="px-3 font-bold uppercase text-lg tracking-wide">
         TDH
       </Link>

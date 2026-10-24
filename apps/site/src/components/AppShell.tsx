@@ -19,7 +19,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         />
       ) : null}
       <div
-        className={`fixed inset-y-0 left-0 z-40 -translate-x-full transition-transform md:static md:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 -translate-x-full transition-transform md:sticky md:top-0 md:h-screen md:self-start md:translate-x-0 ${
           navOpen ? "translate-x-0" : ""
         }`}
       >

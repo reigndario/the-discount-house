@@ -29,6 +29,8 @@ npm run prettier:write       # auto-format
 npm run coverage             # solidity-coverage
 npm run demo:local           # scripted end-to-end protocol run against local Hardhat network
 npm run test:ui              # scripts/ui-smoke.mjs browser UI smoke test
+npm run test:desk-ui         # Desk chat browser test (build the site first: npm run build --workspace tdh-site)
+npm run build:skill          # rebuild skills/bundle-interview/bin (a test fails if it is stale)
 ```
 
 Local deployment:
