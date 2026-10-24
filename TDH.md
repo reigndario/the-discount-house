@@ -34,7 +34,7 @@ pages.
 | 0   | Foundations                         | ✅     |               |                 |
 | 1   | Harness validation on Sepolia       | ⏳     | 0             | You, by wallet  |
 | 2   | SDK consolidation                   | ⏳     | 0             | Code            |
-| 3   | Intent core                         | ⏳     | 2             | Code            |
+| 3   | Intent core                         | 🔨     | 2             | Code            |
 | 3b  | Bundle interview skill (local)      | ⏳     | 3             | Code            |
 | 4   | Desk: chat interface                | ⏳     | 3             | Code            |
 | 5   | Desk: confirmation and submission   | ⏳     | 4             | Code + Sepolia  |
@@ -100,18 +100,18 @@ into the typed, tested SDK, so Desk and the site call one implementation.
 
 Migrating `public/app.js` itself to these helpers is optional and comes after Desk ships.
 
-## Phase 3: Intent core ⏳
+## Phase 3: Intent core 🔨
 
 **Goal:** the brain of Desk's drafting, as pure TypeScript with no UI, in `src/intent/`, tested in mocha.
 
-- [ ] `DraftBundle`: each slot is `{ value, source: stated | default | derived | picked, span? }`
-- [ ] Reducer `(draft, event) -> draft` with no side effects
-- [ ] Parser `extract(text, context) -> SlotCandidate[]`: numbers with units, ranges, targets ("about"), bounds ("at
+- [x] `DraftBundle`: each slot is `{ value, source: stated | default | derived | picked, span? }`
+- [x] Reducer `(draft, event) -> draft` with no side effects
+- [x] Parser `extract(text, context) -> SlotCandidate[]`: numbers with units, ranges, targets ("about"), bounds ("at
       most", "under"), durations, side keywords
-- [ ] Span verifier: reject any value that does not appear in the user's text
-- [ ] Dialogue policy: which slot to ask for next and which quick replies to offer
-- [ ] Fixture corpus of phrasings, including deliberately ambiguous ones
-- [ ] ATP intents: deposit and withdraw with one amount slot
+- [x] Span verifier: reject any value that does not appear in the user's text
+- [x] Dialogue policy: which slot to ask for next and which quick replies to offer
+- [x] Fixture corpus of phrasings, including deliberately ambiguous ones
+- [x] ATP intents: deposit and withdraw with one amount slot
 
 Extraction runs in the browser with a deterministic parser. It asks a question instead of guessing. A small in-browser
 model may be added later behind the same `extract` interface, but it can only propose values, never write them.
@@ -159,7 +159,7 @@ the intent core must stay free of React and browser dependencies.
 
 - [ ] States: drafting, review, confirmed, encrypting, signing, submitted; any edit returns to review
 - [ ] Recap built from the canonical object passed to `encryptBundleFields`, never from chat text
-- [ ] Plain-language copy for every field, with defaults called out ("You didn't state a grace period. Using 30 days.")
+- [ ] Plain-language copy for every field, with defaults called out ("You didn't state a grace period. Using 7 days.")
 - [ ] Confirming stores `canonicalBundleHash`; submission recomputes it and refuses on mismatch
 - [ ] Accurate risk copy: the taker posts the bond, and a wrong bundle can be matched into a loan on the wrong terms
 - [ ] The accent color appears only in the review state
