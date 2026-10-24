@@ -17,9 +17,12 @@ Status: **Accepted** (agreed and in the roadmap or code) · **Proposed** (made i
 | D-005 | Build the skill after the intent core, beside the web chat | Roadmap | Accepted |
 | D-006 | The "bundle interview skill" is the Phase 3b skill         | Roadmap | Accepted |
 | D-007 | Plain bundles state interest as `interestPercent`          | 2: SDK  | Proposed |
-| D-008 | Default grace period: 7 days or 30 days                    | 2: SDK  | Open     |
+| D-008 | Default grace period: 7 days or 30 days                    | 2: SDK  | Accepted |
 | D-009 | The Sepolia smoke script derives the collateral price      | 2: SDK  | Proposed |
 | D-010 | How the confirmation hash is built                         | 2: SDK  | Proposed |
+| D-011 | A bare number is a target, and only an answer when asked   | 3: Core | Accepted |
+| D-012 | Months and years convert to 30 and 365 days                | 3: Core | Accepted |
+| D-013 | Grace is defaulted and never asked                         | 3: Core | Accepted |
 
 ---
 
@@ -144,7 +147,7 @@ visible.
 
 ### D-008: Default grace period: 7 days or 30 days
 
-**Status:** Open · **Date:** 2026-10-23
+**Status:** Accepted (7 days, confirmed 2026-10-24) · **Date:** 2026-10-23
 
 **Context.** Grace is the number of days a borrower has after a repayment is due before default can be enforced. The SDK
 copied the harness default: a range of 0 to 15 days with a target of 7. A copy example written into Phase 5 of the
@@ -156,7 +159,8 @@ roadmap says "Using 30 days". The two disagree.
 - _30 days._ Matches the roadmap example and gives borrowers more room, but it is a product decision about how much
   grace people get when they do not state one, and the default is folded into the confirmation hash.
 
-**Leaning.** Keep 7 days and change the roadmap example to match.
+**Decision.** Keep 7 days and change the roadmap example to match. A longer default would change the confirmation hash
+of any bundle that relied on it, and borrowers who want more can state it.
 
 ### D-009: The Sepolia smoke script derives the collateral price
 
@@ -199,3 +203,53 @@ addresses, bucket labels, **`expiryDays`**, backing ID and the six scaled fields
 - _An absolute expiry timestamp in the hash._ Would break the hash check whenever time passes before submission.
 
 **Consequence.** Changing a default later (see D-008) changes the hash of any bundle that relied on it.
+
+## Phase 3: Intent core (2026-10-24)
+
+### D-011: A bare number is a target, and only an answer when asked
+
+**Status:** Accepted · **Date:** 2026-10-24
+
+**Context.** "Borrow 100k USDC" states one number. It could mean exactly 100k, or about 100k with room either side. A
+bare "90" with no unit could be anything.
+
+**Decision.** A number with a unit and no bound word ("about", "at most", "at least") fills the `target` slot only. The
+dialogue policy then asks whether it is exact or a range, offering an "Exactly X" quick reply. A number with no unit is
+read only as the answer to the question just asked (`context.expecting`). Otherwise the parser returns it unresolved
+(`unknown_field`) and the policy asks which term it belongs to.
+
+**Why.** Desk asks a question instead of guessing. Treating "100k" as an exact amount would silently set the minimum and
+maximum, and those are folded into the confirmation hash.
+
+**Rejected.**
+
+- _Read a bare amount as min = max = target._ Fewer questions, but it guesses.
+- _Guess the field from the number's size._ Fragile and invisible to the user.
+
+### D-012: Months and years convert to 30 and 365 days
+
+**Status:** Accepted · **Date:** 2026-10-24
+
+**Context.** Durations are stored in days, but people say "6 months" or "2 years".
+
+**Decision.** Weeks, months and years convert to 7, 30 and 365 days. The slot is marked `derived` and keeps its span ("6
+months"), and the span verifier recomputes the conversion from the cited text.
+
+**Why.** The review recap shows days, so the user sees the conversion before confirming. A calendar-accurate month would
+make the value depend on a start date that does not exist yet.
+
+**Rejected.** _Ask for days only._ Safer but unfriendly. _Calendar months._ Needs a start date.
+
+### D-013: Grace is defaulted and never asked
+
+**Status:** Accepted · **Date:** 2026-10-24
+
+**Context.** Four terms are essential to a bundle. Grace has a sensible default and most people will not state it.
+
+**Decision.** Once the side is known, grace is filled from `defaultsForSide` with source `default`, and a stated grace
+overrides it. The policy never asks about it; the review recap lists it as a default.
+
+**Why.** Fewer questions, and defaults stay visible rather than hidden. This depends on D-008 (7 or 30 days): the value
+changes with that decision, and so does the confirmation hash.
+
+**Rejected.** _Ask for grace every time._ Adds a question most users answer with "whatever is normal."
