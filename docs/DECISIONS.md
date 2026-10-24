@@ -29,6 +29,7 @@ Status: **Accepted** (agreed and in the roadmap or code) · **Proposed** (made i
 | D-017 | The site imports the intent core from source               | 4a      | Proposed |
 | D-018 | The diagram shows default direction and priority           | 4a      | Proposed |
 | D-019 | Desk uses the site palette; color marks state              | 4a      | Proposed |
+| D-020 | New logo; desktop home puts the brand between the marks    | Brand   | Accepted |
 
 ---
 
@@ -381,3 +382,31 @@ site's palette also makes Desk feel like the rest of the product.
 **Consequence.** Red means "contradiction" on Desk but is also Book's section color elsewhere. They never share a
 screen, but it is worth watching. The "public" and "encrypted" words now live in the legend and in screen-reader labels,
 not on each row.
+
+## Brand (2026-10-24)
+
+### D-020: New logo; desktop home puts the brand between the marks
+
+**Status:** Accepted · **Date:** 2026-10-24
+
+**Context.** The old logo was a flat 256px house, shown at 40 to 48px above the home marks, which made it easy to miss.
+The owner redrew it in a glossier, more three-dimensional style (a beveled metallic rim and a green gradient) while
+keeping the same silhouette and the three cutouts for T, D and H.
+
+**Decision.** The new logo replaces the old one everywhere. It is cut out of its dark render background into a 768px
+transparent PNG with `apps/site/scripts/cutout-logo.mjs`, so it works on both the cream and dark themes, and every app
+icon is re-rendered from it. On desktop (1024px and up) the home page is one row: Borrow and Lend on the left, the logo
+with the wordmark in the middle at 192px, ATP and Docs on the right. Below 1024px the layout stays stacked, with a
+larger logo.
+
+**Why.** A logo that is the largest thing on the page reads as the brand, and putting it between the marks makes the
+page symmetrical. The cutout keeps one source file for light and dark themes and for the icons.
+
+**Rejected.**
+
+- _Use the render as is._ It has a dark background, so on the cream theme it would show as a black square.
+- _Keep the logo small and above the marks._ The owner found it too small.
+- _The row layout on tablets too._ Below 1024px there is not enough width for five items without shrinking the marks.
+
+**Consequence.** The cutout finds the background by its darkness, so a future render on a lighter background would need
+the threshold in `cutout-logo.mjs` changed. The icon tiles stay on the site's cream paper color.

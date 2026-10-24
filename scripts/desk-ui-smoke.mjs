@@ -197,6 +197,68 @@ try {
     await phone.close();
   });
 
+  // Home page layout. Desktop puts the four marks and the brand in one row; below 1024px it stays stacked.
+  const homeBoxes = async (p) => {
+    await p.goto(`${base}/`);
+    await p.waitForSelector("nav[aria-label=Primary]");
+    const box = async (name) => await p.getByRole("link", { name }).boundingBox();
+    return {
+      borrow: await box("Borrow"),
+      lend: await box("Lend"),
+      atp: await box("ATP"),
+      docs: await box("Docs"),
+      logo: await p.locator("main img").first().boundingBox(),
+    };
+  };
+  const midY = (b) => b.y + b.height / 2;
+
+  await check("desktop home: Borrow, Lend, brand, ATP, Docs in one row", async () => {
+    const wide = await browser.newPage({ viewport: { width: 1440, height: 860 } });
+    const h = await homeBoxes(wide);
+    assert.ok(
+      h.borrow.x < h.lend.x && h.lend.x < h.logo.x && h.logo.x < h.atp.x && h.atp.x < h.docs.x,
+      "left to right order",
+    );
+    const mids = [h.borrow, h.lend, h.atp, h.docs].map(midY);
+    assert.ok(Math.max(...mids) - Math.min(...mids) < 4, `marks share a line: ${mids}`);
+    assert.ok(Math.abs(midY(h.logo) - mids[0]) < 90, "brand sits on the same row");
+    assert.ok(h.logo.width >= 160, `logo is large: ${h.logo.width}px`);
+    const centerX = h.logo.x + h.logo.width / 2;
+    assert.ok(Math.abs(centerX - 720) < 4, `brand is centered: ${centerX}`);
+    await wide.close();
+  });
+
+  await check("mobile home stays stacked: brand above a two-by-two grid", async () => {
+    const phone = await browser.newPage({ viewport: { width: 390, height: 844 } });
+    const h = await homeBoxes(phone);
+    assert.ok(h.logo.y + h.logo.height < h.borrow.y, "brand above the marks");
+    assert.ok(h.borrow.x < h.lend.x && Math.abs(h.borrow.y - h.lend.y) < 4, "Borrow and Lend share a row");
+    assert.ok(h.atp.y > h.borrow.y + 40 && h.atp.x < h.docs.x, "ATP and Docs on the next row");
+    assert.ok(h.logo.width >= 80, `logo is larger than before: ${h.logo.width}px`);
+    assert.ok(
+      (await phone.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)) <= 0,
+      "no sideways scroll",
+    );
+    await phone.close();
+  });
+
+  await check("the logo is a transparent cutout", async () => {
+    const { default: sharp } = await import("sharp");
+    const buf = Buffer.from(await (await fetch(`${base}/tdh-logo.png`)).arrayBuffer());
+    const { data, info } = await sharp(buf).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    assert.ok(info.width >= 512, `source is at least 512px: ${info.width}`);
+    const alphaAt = (x, y) => data[(y * info.width + x) * 4 + 3];
+    for (const [x, y] of [
+      [2, 2],
+      [info.width - 3, 2],
+      [2, info.height - 3],
+      [info.width - 3, info.height - 3],
+    ]) {
+      assert.equal(alphaAt(x, y), 0, `corner (${x},${y}) is transparent`);
+    }
+    assert.equal(alphaAt(info.width >> 1, info.height >> 1), 255, "center is solid");
+  });
+
   await check("no page errors", async () => assert.deepEqual(errors, []));
 } finally {
   await browser?.close();

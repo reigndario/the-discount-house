@@ -66,7 +66,16 @@ function useIsTouch() {
   );
 }
 
-export function HomeIndex() {
+// On desktop the four marks and the brand share one row: Borrow and Lend on the left, the brand in the middle, ATP and
+// Docs on the right. Below that breakpoint the brand stacks above a two-by-two grid.
+const DESKTOP_SLOT: Record<GlyphName, string> = {
+  borrow: "lg:col-start-1",
+  lend: "lg:col-start-2",
+  atp: "lg:col-start-4",
+  docs: "lg:col-start-5",
+};
+
+export function HomeIndex({ brand }: { brand: React.ReactNode }) {
   const isTouch = useIsTouch();
   // Hover/focus preview (desktop) and tap selection (touch) are tracked separately so a stray
   // emulated mouse event on touch can't clear the glyph the user deliberately selected.
@@ -81,8 +90,13 @@ export function HomeIndex() {
     : 0.04;
 
   return (
-    <div className="w-full max-w-md">
-      <nav aria-label="Primary" className="grid grid-cols-2 gap-x-6 gap-y-8 sm:gap-y-14 sm:gap-x-16">
+    <div className="w-full max-w-md lg:max-w-5xl">
+      <div className="flex flex-col items-center lg:grid lg:grid-cols-[1fr_1fr_auto_1fr_1fr] lg:items-center lg:gap-x-6">
+        <div className="mb-10 sm:mb-14 lg:col-start-3 lg:row-start-1 lg:mx-10 lg:mb-0">{brand}</div>
+        <nav
+          aria-label="Primary"
+          className="grid w-full grid-cols-2 gap-x-6 gap-y-8 sm:gap-y-14 sm:gap-x-16 lg:contents"
+        >
         {ENTRIES.map((entry) => (
           <Link
             key={entry.glyph}
@@ -98,7 +112,7 @@ export function HomeIndex() {
                 setSelected(entry.glyph);
               }
             }}
-            className="group flex flex-col items-center gap-3 sm:gap-4 outline-none focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-foreground"
+            className={`group flex flex-col items-center gap-3 sm:gap-4 lg:row-start-1 ${DESKTOP_SLOT[entry.glyph]} outline-none focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-foreground`}
           >
             <Glyph name={entry.glyph} className="h-16 w-16 sm:h-24 sm:w-24" />
             <span
@@ -110,9 +124,10 @@ export function HomeIndex() {
             </span>
           </Link>
         ))}
-      </nav>
+        </nav>
+      </div>
 
-      <figure className="mt-12 sm:mt-20" aria-live="polite">
+      <figure className="mt-12 sm:mt-20 lg:mx-auto lg:mt-24 lg:max-w-xl" aria-live="polite">
         <figcaption className="text-xs font-light uppercase tracking-[0.2em] mb-3">
           {disclosure.caption}
         </figcaption>
