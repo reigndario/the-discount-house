@@ -1,7 +1,7 @@
 // Renders the PWA and browser icons from the TDH house logo (public/tdh-logo.png) on the site's paper color.
 // Run from apps/site after changing the logo: node scripts/generate-icons.mjs
-// Uses sharp, which ships with Next.js. The source logo is 256px, so the 512px icons are upscaled; swap in a
-// larger or vector logo here when one exists.
+// Uses sharp, which ships with Next.js. The logo is a 768px transparent cutout made by scripts/cutout-logo.mjs, so
+// every icon size is rendered down from it, never upscaled.
 import { mkdir } from "node:fs/promises";
 import sharp from "sharp";
 
