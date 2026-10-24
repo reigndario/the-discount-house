@@ -13,6 +13,7 @@ coverage
 dist
 node_modules
 public/vendor
+skills/*/bin
 types
 public/docs/original
 

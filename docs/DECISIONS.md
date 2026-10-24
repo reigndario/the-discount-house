@@ -23,6 +23,8 @@ Status: **Accepted** (agreed and in the roadmap or code) · **Proposed** (made i
 | D-011 | A bare number is a target, and only an answer when asked   | 3: Core | Accepted |
 | D-012 | Months and years convert to 30 and 365 days                | 3: Core | Accepted |
 | D-013 | Grace is defaulted and never asked                         | 3: Core | Accepted |
+| D-014 | The skill leaves wallet fields and the hash to the page    | 3b      | Proposed |
+| D-015 | The agent relays; a local CLI is the source of truth       | 3b      | Proposed |
 
 ---
 
@@ -253,3 +255,47 @@ overrides it. The policy never asks about it; the review recap lists it as a def
 changes with that decision, and so does the confirmation hash.
 
 **Rejected.** _Ask for grace every time._ Adds a question most users answer with "whatever is normal."
+
+## Phase 3b: Bundle interview skill (2026-10-24)
+
+### D-014: The skill leaves wallet fields and the hash to the review page
+
+**Status:** Proposed · **Date:** 2026-10-24
+
+**Context.** The roadmap says the CLI emits the canonical bundle JSON and its `canonicalBundleHash`. But the hash
+(D-010) covers the collateral token, the TokenOps manager and the backing ID, and a skill running in a terminal has no
+way to know them without the user's wallet.
+
+**Decision.** `emit` writes the conversation's terms and, by default, `wallet: null` and `hash: null`. If the user
+supplies all three wallet fields, it writes them and the SDK's `canonicalBundleHash`. The review page fills the wallet
+fields from the connected wallet and recomputes the hash itself, whatever the file says.
+
+**Why.** Inventing placeholder addresses to get a hash would produce a hash that means nothing. The gate has to live in
+the page anyway (D-002), so the file never needs to carry a trusted hash.
+
+**Rejected.**
+
+- _Placeholder addresses so a hash always exists._ A meaningless hash that looks meaningful.
+- _Ask the user to paste addresses during the interview._ Adds three hard questions to a plain-language flow, and
+  invites typos in values the wallet already knows.
+
+### D-015: The agent relays; a local CLI is the source of truth
+
+**Status:** Proposed · **Date:** 2026-10-24
+
+**Context.** If the model fills in values itself, it can misread, round or invent them, which is exactly what the span
+verifier exists to prevent.
+
+**Decision.** The skill tells the agent to pass the user's exact words to `tdh-bundle say`. The CLI parses them, rejects
+any value not in the text, keeps the draft in a local file and chooses the next question. The CLI is bundled with
+esbuild into one committed file, `skills/bundle-interview/bin/tdh-bundle.cjs`, with a SHA-256 beside it. A test fails if
+the committed file is stale, and another checks that it requires nothing but `node:fs`.
+
+**Why.** The same checks apply as in the web chat, and installing the skill needs no `npm install`. The cost is a
+generated file in the repo, kept honest by the test.
+
+**Rejected.**
+
+- _Instructions only, no CLI._ The model would do the parsing, with nothing enforcing the span rule.
+- _Publish the CLI to npm._ Adds a supply-chain step and a second place to verify. The local signing page already needs
+  a pinned-checksum release, so one mechanism is enough for now.

@@ -34,8 +34,8 @@ pages.
 | 0   | Foundations                         | ✅     |               |                 |
 | 1   | Harness validation on Sepolia       | ⏳     | 0             | You, by wallet  |
 | 2   | SDK consolidation                   | ⏳     | 0             | Code            |
-| 3   | Intent core                         | 🔨     | 2             | Code            |
-| 3b  | Bundle interview skill (local)      | ⏳     | 3             | Code            |
+| 3   | Intent core                         | ✅     | 2             | Code            |
+| 3b  | Bundle interview skill (local)      | 🔨     | 3             | Code            |
 | 4   | Desk: chat interface                | ⏳     | 3             | Code            |
 | 5   | Desk: confirmation and submission   | ⏳     | 4             | Code + Sepolia  |
 | 6   | Desk agent: questions and guidance  | ⏳     | 4             | Code            |
@@ -100,7 +100,7 @@ into the typed, tested SDK, so Desk and the site call one implementation.
 
 Migrating `public/app.js` itself to these helpers is optional and comes after Desk ships.
 
-## Phase 3: Intent core 🔨
+## Phase 3: Intent core ✅
 
 **Goal:** the brain of Desk's drafting, as pure TypeScript with no UI, in `src/intent/`, tested in mocha.
 
@@ -116,22 +116,22 @@ Migrating `public/app.js` itself to these helpers is optional and comes after De
 Extraction runs in the browser with a deterministic parser. It asks a question instead of guessing. A small in-browser
 model may be added later behind the same `extract` interface, but it can only propose values, never write them.
 
-## Phase 3b: Bundle interview skill (local) ⏳
+## Phase 3b: Bundle interview skill (local) 🔨
 
 **Goal:** the same drafting brain, distributed as an agent skill anyone can install and run locally, alongside the
 site's Desk chat, so both technical and non-technical users are served. Both channels share the Phase 3 intent core, so
 the intent core must stay free of React and browser dependencies.
 
-- [ ] `skills/bundle-interview/SKILL.md`: interview behavior, one question at a time, never guesses a value
-- [ ] Small CLI wrapper around the intent core and SDK: validates a draft and emits the canonical bundle JSON and its
+- [x] `skills/bundle-interview/SKILL.md`: interview behavior, one question at a time, never guesses a value
+- [x] Small CLI wrapper around the intent core and SDK: validates a draft and emits the canonical bundle JSON and its
       `canonicalBundleHash`
-- [ ] The skill never holds keys and never signs, encrypts or submits; it only produces the bundle JSON
+- [x] The skill never holds keys and never signs, encrypts or submits; it only produces the bundle JSON
 - [ ] Hosted path (default): the user imports the bundle JSON into the site's review step (Phase 5)
 - [ ] Local signing page (optional): the same review and signing page packaged to run on localhost. The skill downloads
       it from a tagged GitHub release (never `main`) and verifies a pinned checksum before launching it
 - [ ] The review and wallet-approval gate lives in the page, never in the LLM; the page recomputes the hash and requires
       a confirmation the agent cannot give
-- [ ] Install and usage docs, including the note that text goes to the user's own model provider
+- [x] Install and usage docs, including the note that text goes to the user's own model provider
 - [ ] Reuses the Phase 6 knowledge base for questions about the products
 - [ ] Demo: test the finished skill end to end, from interview to a signed bundle
 

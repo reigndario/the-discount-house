@@ -22,8 +22,11 @@ function range(draft: DraftBundle, field: PlainFieldName): PlainField {
   return { range: { min: get("min"), max: get("max"), target: get("target") } };
 }
 
-/** Build the SDK's `PlainBundle` from a finished draft. Throws if the dialogue policy is not done. */
-export function toPlainBundle(draft: DraftBundle, extras: BundleExtras): PlainBundle {
+/** The terms a conversation can produce: everything in a `PlainBundle` except the wallet-specific fields. */
+export type BundleTerms = Omit<PlainBundle, "collateralToken" | "tokenOpsManager" | "backingId">;
+
+/** Terms from a finished draft. Throws if the dialogue policy is not done. */
+export function toTerms(draft: DraftBundle, expiryDays?: number): BundleTerms {
   if (draftIntent(draft) !== "bundle") throw new Error("draft is not a bundle");
   const turn = nextTurn(draft);
   if (!turn.done) throw new Error(`draft is incomplete: ${turn.question}`);
@@ -31,15 +34,22 @@ export function toPlainBundle(draft: DraftBundle, extras: BundleExtras): PlainBu
   const [principal, collateralAmount, interestPercent, durationDays] = ASKED_FIELDS.map((f) => range(draft, f));
   return {
     side,
-    collateralToken: extras.collateralToken,
-    tokenOpsManager: extras.tokenOpsManager,
-    backingId: extras.backingId,
-    expiryDays: extras.expiryDays ?? defaultsForSide(side).expiryDays,
+    expiryDays: expiryDays ?? defaultsForSide(side).expiryDays,
     collateralAmount,
     principal,
     interestPercent,
     durationDays,
     gracePeriodDays: range(draft, "gracePeriodDays"),
+  };
+}
+
+/** Build the SDK's `PlainBundle` from a finished draft plus the wallet-specific fields. */
+export function toPlainBundle(draft: DraftBundle, extras: BundleExtras): PlainBundle {
+  return {
+    ...toTerms(draft, extras.expiryDays),
+    collateralToken: extras.collateralToken,
+    tokenOpsManager: extras.tokenOpsManager,
+    backingId: extras.backingId,
   };
 }
 
