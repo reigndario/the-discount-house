@@ -25,6 +25,9 @@ Status: **Accepted** (agreed and in the roadmap or code) · **Proposed** (made i
 | D-013 | Grace is defaulted and never asked                         | 3: Core | Accepted |
 | D-014 | The skill leaves wallet fields and the hash to the page    | 3b      | Proposed |
 | D-015 | The agent relays; a local CLI is the source of truth       | 3b      | Proposed |
+| D-016 | Split Phase 4: 4a chat UI, 4b wallet and relayer           | 4a      | Accepted |
+| D-017 | The site imports the intent core from source               | 4a      | Proposed |
+| D-018 | The diagram shows default direction and priority           | 4a      | Proposed |
 
 ---
 
@@ -299,3 +302,51 @@ generated file in the repo, kept honest by the test.
 - _Instructions only, no CLI._ The model would do the parsing, with nothing enforcing the span rule.
 - _Publish the CLI to npm._ Adds a supply-chain step and a second place to verify. The local signing page already needs
   a pinned-checksum release, so one mechanism is enough for now.
+
+## Phase 4a: Desk chat UI (2026-10-24)
+
+### D-016: Split Phase 4: 4a chat UI, 4b wallet and relayer
+
+**Status:** Accepted · **Date:** 2026-10-24
+
+**Context.** Phase 4 mixes a self-contained UI with the riskiest integration work: the wallet connector, the Zama
+relayer browser build, COOP/COEP headers, a Content Security Policy and a Hardhat end-to-end test.
+
+**Decision.** 4a is the chat, diagram, entry chips and the privacy rules, fully local with no wallet. 4b is everything
+that touches a wallet or the relayer.
+
+**Why.** 4a can be built, reviewed and tested completely on its own, and the privacy rules (nothing stored, nothing
+sent) are easiest to prove before any network code exists. Header and relayer issues then cannot hide inside a large UI
+diff.
+
+**Rejected.** _One branch for all of Phase 4._ A much larger PR mixing two kinds of risk.
+
+### D-017: The site imports the intent core from source
+
+**Status:** Proposed · **Date:** 2026-10-24
+
+**Context.** The site is an npm workspace that depends on the root package. The root package only exported the SDK from
+`dist/`, which is gitignored, and the site's CI job runs `npm ci` and a site build without building `dist/`.
+
+**Decision.** The root package exports `./intent` pointing at `src/intent/index.ts`, and Next transpiles it as a
+workspace package. The site's TypeScript target moved from ES2017 to ES2020, because the SDK uses BigInt literals.
+
+**Why.** No extra build step in CI or on Vercel, and the site and the skill CLI run the exact same source.
+
+**Rejected.** _Build `dist/` before the site build._ Another step that can go stale. _Copy the code into the site._ Two
+copies of the drafting logic would drift.
+
+### D-018: The diagram shows default direction and priority
+
+**Status:** Proposed · **Date:** 2026-10-24
+
+**Context.** Every field also carries an encrypted direction and priority. The conversation cannot set them yet, but the
+diagram is meant to show what will be submitted.
+
+**Decision.** Once the side is known, each row shows its default direction and priority (five squares), labeled
+"default". They are display only until Desk can change them.
+
+**Why.** The user sees the whole object, and the defaults are the ones folded into the confirmation hash (D-010), so
+hiding them would hide part of what they confirm.
+
+**Rejected.** _Leave them off until they can be edited._ The recap would then omit values that are submitted.

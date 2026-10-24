@@ -3,6 +3,7 @@ export { extract, parseQuantity, findQuantities } from "./parser";
 export { verifySpan, verifyAll } from "./verify";
 export { reduce, draftIntent, type DraftEvent } from "./reducer";
 export { nextTurn, validateDraft, describeDraft, FIELD_LABELS, type Turn, type QuickReply } from "./policy";
+export { diagramRows, type DiagramRow, type RowState } from "./view";
 export { toPlainBundle, toTerms, toAtpIntent, type BundleExtras, type BundleTerms, type AtpIntent } from "./bundle";
 
 import { extract } from "./parser";

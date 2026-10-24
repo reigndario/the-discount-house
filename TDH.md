@@ -36,7 +36,7 @@ pages.
 | 2   | SDK consolidation                   | ⏳     | 0             | Code            |
 | 3   | Intent core                         | ✅     | 2             | Code            |
 | 3b  | Bundle interview skill (local)      | 🔨     | 3             | Code            |
-| 4   | Desk: chat interface                | ⏳     | 3             | Code            |
+| 4   | Desk: chat interface                | 🔨     | 3             | Code            |
 | 5   | Desk: confirmation and submission   | ⏳     | 4             | Code + Sepolia  |
 | 6   | Desk agent: questions and guidance  | ⏳     | 4             | Code            |
 | 7   | Book and Vault in the site          | ⏳     | 2, indexing   | Code + Sepolia  |
@@ -135,23 +135,26 @@ the intent core must stay free of React and browser dependencies.
 - [ ] Reuses the Phase 6 knowledge base for questions about the products
 - [ ] Demo: test the finished skill end to end, from interview to a signed bundle
 
-## Phase 4: Desk, chat interface ⏳
+## Phase 4: Desk, chat interface 🔨
 
 **Goal:** `/desk` becomes a working chat that drafts bundles locally. Desk is one agent with two capabilities: drafting
 (this phase) and guidance (Phase 6).
 
-- [ ] Ledger-style transcript: no bubbles or avatars; user turns in Jost 500, Desk turns in Jost 300, 1px rules
-- [ ] Sharp-cornered input and buttons, no shadows
-- [ ] Entry chips from the homepage glyphs (Borrow, Lend, ATP, Docs); `?side=` from the homepage pre-fills the side
-- [ ] Diagram panel: one row per field, ranges as bars with a target tick, empty / stated / default states, priority as
+Split in two: **4a** is the chat UI, diagram and privacy rules, fully local with no wallet (done above the line). **4b**
+is the wallet connector, relayer SDK build, CSP, collateral picker and the Hardhat end-to-end test.
+
+- [x] Ledger-style transcript: no bubbles or avatars; user turns in Jost 500, Desk turns in Jost 300, 1px rules
+- [x] Sharp-cornered input and buttons, no shadows
+- [x] Entry chips from the homepage glyphs (Borrow, Lend, ATP, Docs); `?side=` from the homepage pre-fills the side
+- [x] Diagram panel: one row per field, ranges as bars with a target tick, empty / stated / default states, priority as
       five squares, "public" or "encrypted" label on every row
 - [ ] Collateral picker from the wallet's on-chain positions (custodied vesting or escrowed cUSDC)
 - [ ] Wallet connector (viem) and `@zama-fhe/relayer-sdk` browser build in `apps/site`; check COOP/COEP headers
 - [ ] Content Security Policy limiting outgoing connections to the RPC and the relayer
-- [ ] Desk route drops the colored sidebar accents so the monochrome rule holds
-- [ ] Transcript and draft live in memory only; nothing written to `localStorage`
-- [ ] No analytics or session replay on Desk or ATP routes
-- [ ] Playwright test against local Hardhat
+- [x] Desk route drops the colored sidebar accents so the monochrome rule holds
+- [x] Transcript and draft live in memory only; nothing written to `localStorage`
+- [x] No analytics or session replay on Desk or ATP routes
+- [ ] Playwright test against local Hardhat (4b; `npm run test:desk-ui` already covers the 4a UI with no chain)
 
 ## Phase 5: Desk, confirmation and submission ⏳
 

@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import {
   applyMessage,
+  diagramRows,
   emptyDraft,
   extract,
   nextTurn,
@@ -218,5 +219,42 @@ describe("intent core", () => {
       expect(bundle.gracePeriodDays.range).to.deep.equal({ min: 0, max: 15, target: 7 });
       expect(canonicalBundleHash(bundle)).to.match(/^0x[0-9a-f]{64}$/);
     });
+  });
+});
+
+describe("diagram rows", () => {
+  it("is empty before anything is said, and labels the side as public and terms as encrypted", () => {
+    const rows = diagramRows(emptyDraft());
+    expect(rows.map((r) => r.state)).to.deep.equal(["empty", "empty", "empty", "empty", "empty", "empty"]);
+    expect(rows[0]).to.deep.include({ key: "side", visibility: "public" });
+    expect(rows.slice(1).every((r) => r.visibility === "encrypted")).to.equal(true);
+  });
+
+  it("marks stated values, defaults, and the public bucket beside an encrypted range", () => {
+    const draft = applyMessage(emptyDraft(), "I want to borrow between 80k and 120k usdc");
+    const rows = Object.fromEntries(diagramRows(draft).map((r) => [r.key, r]));
+    expect(rows.side).to.deep.include({ state: "stated", text: "borrower" });
+    expect(rows.principal).to.deep.include({ state: "stated", min: 80_000, max: 120_000, target: 100_000 });
+    expect(rows.principal.publicBucket).to.equal("P<250000");
+    expect(rows.gracePeriodDays).to.deep.include({ state: "default", min: 0, max: 15, target: 7 });
+    expect(rows.interestPercent.state).to.equal("empty");
+  });
+
+  it("shows side defaults for direction and priority, labeled as defaults", () => {
+    const draft = reduce(emptyDraft(), { type: "set", slot: "side", value: "lender" });
+    const row = diagramRows(draft).find((r) => r.key === "principal")!;
+    expect(row).to.deep.include({
+      direction: "target_is_best",
+      directionState: "default",
+      priority: 5,
+      priorityState: "default",
+    });
+  });
+
+  it("shows one amount row for ATP", () => {
+    const draft = applyMessage(emptyDraft(), "deposit 5,000 usdc");
+    expect(diagramRows(draft)).to.deep.equal([
+      { key: "amount", label: "Deposit amount", unit: "USDC", visibility: "encrypted", state: "stated", text: "5000" },
+    ]);
   });
 });
