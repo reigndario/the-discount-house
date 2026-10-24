@@ -1,12 +1,16 @@
 import hre, { ethers } from "hardhat";
+import {
+  durationBucketLabel,
+  encryptBundleFields,
+  principalBucketLabel,
+  type BundleRelayer,
+  type PlainBundle,
+  type PlainSide,
+} from "../src/protocolSdk";
 import type { ConfidentialPreferenceBook } from "../types";
 
 const BORROWER = 0;
 const LENDER = 1;
-const LOWER_IS_BETTER = 0;
-const HIGHER_IS_BETTER = 1;
-const TARGET_IS_BEST = 2;
-const NORMAL_PRIORITY = 2;
 const MIN_SECOND_SIGNER_ETH = ethers.parseEther("0.01");
 const SECOND_SIGNER_ETH_TOP_UP = ethers.parseEther("0.015");
 
@@ -15,8 +19,6 @@ type GasLine = {
   hash: string;
   gasUsed: string | undefined;
 };
-
-type PlainField = readonly [bigint, bigint, bigint, number, number];
 
 async function main() {
   if (hre.network.name !== "sepolia") {
@@ -126,15 +128,16 @@ async function preferenceInput({
   tokenOpsManager: string;
   backingId: string;
 }) {
+  const plain = plainBundleForSide(side, collateralToken, tokenOpsManager, backingId);
   const metadata = {
     side,
     collateralToken,
     tokenOpsManager,
-    principalBucket: ethers.encodeBytes32String("P<000150"),
-    durationBucket: ethers.encodeBytes32String("D<000720"),
-    expiry: BigInt(Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60),
+    principalBucket: ethers.encodeBytes32String(principalBucketLabel(plain.principal.range.max)),
+    durationBucket: ethers.encodeBytes32String(durationBucketLabel(plain.durationDays.range.max)),
+    expiry: BigInt(Math.floor(Date.now() / 1000) + plain.expiryDays * 24 * 60 * 60),
   };
-  const encrypted = await browserStyleEncryptedFields(bookAddress, managerAddress, side);
+  const encrypted = await encryptBundleFields(await relayerInstance(), bookAddress, managerAddress, plain);
   return {
     metadata,
     backingId,
@@ -142,62 +145,33 @@ async function preferenceInput({
   };
 }
 
-async function browserStyleEncryptedFields(bookAddress: string, managerAddress: string, side: number) {
-  const relayer = await relayerInstance();
-  const builder = relayer.createEncryptedInput(ethers.getAddress(bookAddress), ethers.getAddress(managerAddress));
-  const fields = fieldsForSide(side);
-  for (const [min, max, target, direction, priority] of fields) {
-    builder.add64(min);
-    builder.add64(max);
-    builder.add64(target);
-    builder.add8(direction);
-    builder.add8(priority);
+function plainBundleForSide(
+  side: number,
+  collateralToken: string,
+  tokenOpsManager: string,
+  backingId: string,
+): PlainBundle {
+  const plainSide: PlainSide = side === BORROWER ? "borrower" : "lender";
+  const common = { side: plainSide, collateralToken, tokenOpsManager, backingId, expiryDays: 30 };
+  if (side === BORROWER) {
+    return {
+      ...common,
+      collateralAmount: { range: { min: 100_000, max: 175_000, target: 135_000 } },
+      principal: { range: { min: 80, max: 120, target: 100 } },
+      interestPercent: { range: { min: 5, max: 8, target: 5 } },
+      durationDays: { range: { min: 360, max: 720, target: 720 } },
+      gracePeriodDays: { range: { min: 7, max: 30, target: 30 } },
+    };
   }
-
-  const proof = builder.generateZKProof();
-  const { handles, inputProof } = await relayer.requestZKProofVerification(proof);
-  let cursor = 0;
-  const nextField = () => ({
-    range: {
-      min: ethers.hexlify(handles[cursor++]),
-      max: ethers.hexlify(handles[cursor++]),
-      target: ethers.hexlify(handles[cursor++]),
-    },
-    direction: ethers.hexlify(handles[cursor++]),
-    priority: ethers.hexlify(handles[cursor++]),
-  });
 
   return {
-    collateralAmount: nextField(),
-    principal: nextField(),
-    collateralTokenPriceE8: nextField(),
-    interestBps: nextField(),
-    durationDays: nextField(),
-    gracePeriodDays: nextField(),
-    inputProof: ethers.hexlify(inputProof),
+    ...common,
+    collateralAmount: { range: { min: 100_000, max: 200_000, target: 150_000 }, priority: 5 },
+    principal: { range: { min: 70, max: 130, target: 100 }, priority: 3 },
+    interestPercent: { range: { min: 6, max: 10, target: 10 }, priority: 5 },
+    durationDays: { range: { min: 180, max: 720, target: 360 }, priority: 3 },
+    gracePeriodDays: { range: { min: 0, max: 15, target: 0 }, priority: 4 },
   };
-}
-
-function fieldsForSide(side: number): PlainField[] {
-  if (side === BORROWER) {
-    return [
-      [100_000n, 175_000n, 135_000n, LOWER_IS_BETTER, 3],
-      [80n, 120n, 100n, HIGHER_IS_BETTER, 4],
-      [60_000_000n, 90_000_000n, 75_000_000n, HIGHER_IS_BETTER, 3],
-      [500n, 800n, 500n, LOWER_IS_BETTER, 4],
-      [360n, 720n, 720n, HIGHER_IS_BETTER, NORMAL_PRIORITY],
-      [7n, 30n, 30n, HIGHER_IS_BETTER, NORMAL_PRIORITY],
-    ];
-  }
-
-  return [
-    [100_000n, 200_000n, 150_000n, HIGHER_IS_BETTER, 4],
-    [70n, 130n, 100n, TARGET_IS_BEST, NORMAL_PRIORITY],
-    [60_000_000n, 90_000_000n, 75_000_000n, HIGHER_IS_BETTER, 3],
-    [600n, 1_000n, 1_000n, HIGHER_IS_BETTER, 4],
-    [180n, 720n, 360n, LOWER_IS_BETTER, NORMAL_PRIORITY],
-    [0n, 15n, 0n, LOWER_IS_BETTER, 3],
-  ];
 }
 
 async function fundSecondSignerIfNeeded(
@@ -215,20 +189,20 @@ async function fundSecondSignerIfNeeded(
   console.log(`fundSecondSignerEthTx=${tx.hash}`);
 }
 
-let cachedRelayer: Awaited<ReturnType<typeof createRelayerInstance>> | undefined;
+let cachedRelayer: BundleRelayer | undefined;
 
 async function relayerInstance() {
   cachedRelayer ??= await createRelayerInstance();
   return cachedRelayer;
 }
 
-async function createRelayerInstance() {
+async function createRelayerInstance(): Promise<BundleRelayer> {
   const sdk = await import("@zama-fhe/relayer-sdk/node");
   const rpcUrl = process.env.SEPOLIA_RPC_URL ?? "https://ethereum-sepolia-rpc.publicnode.com";
-  return sdk.createInstance({
+  return (await sdk.createInstance({
     ...sdk.SepoliaConfig,
     network: rpcUrl,
-  });
+  })) as unknown as BundleRelayer;
 }
 
 async function readManifest() {

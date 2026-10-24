@@ -86,17 +86,17 @@ build.
 **Goal:** move the logic that turns user intent into contract input out of `public/app.js` (untyped, about 6,300 lines)
 into the typed, tested SDK, so Desk and the site call one implementation.
 
-- [ ] `principalBucketLabel(max)` and `durationBucketLabel(max)` with the bucket tables
-- [ ] `impliedCollateralPrice(principal, collateral, side)`
-- [ ] `toContractFields(plain)`: unit scaling (rate x100, price x1e8), priority 1-5 to 0-4, direction mapping
-- [ ] `defaultsForSide(side)`: default directions, priorities and grace period
-- [ ] `deriveBackingId(bundleId)`
-- [ ] `encryptBundleFields(relayer, bookAddress, account, plain)` behind a structural relayer interface, so the SDK
+- [x] `principalBucketLabel(max)` and `durationBucketLabel(max)` with the bucket tables
+- [x] `impliedCollateralPrice(principal, collateral, side)`
+- [x] `toContractFields(plain)`: unit scaling (rate x100, price x1e8), priority 1-5 to 0-4, direction mapping
+- [x] `defaultsForSide(side)`: default directions, priorities and grace period
+- [x] `deriveBackingId(bundleId)`
+- [x] `encryptBundleFields(relayer, bookAddress, account, plain)` behind a structural relayer interface, so the SDK
       gains no dependency
-- [ ] `canonicalBundleHash(plain)` for the confirmation gate
-- [ ] Make `asciiBucket` work in the browser (no `Buffer`)
+- [x] `canonicalBundleHash(plain)` for the confirmation gate
+- [x] Make `asciiBucket` work in the browser (no `Buffer`)
 - [ ] Switch `scripts/sepolia-preference-submit-smoke.ts` to `encryptBundleFields` and run it on Sepolia
-- [ ] Unit tests for every new function, including bucket-table edge cases
+- [x] Unit tests for every new function, including bucket-table edge cases
 
 Migrating `public/app.js` itself to these helpers is optional and comes after Desk ships.
 

@@ -106,5 +106,9 @@ Supporting layers:
 
 Roadmap: `TDH.md` at the repo root lists every phase and its checklist; tick items there as they land.
 
+Decisions: at the end of each phase, append one entry per decision to `docs/DECISIONS.md` (context, decision, why, and
+the rejected alternatives). Mark entries Accepted, Proposed or Open, and do not record a decision as Accepted until the
+user has confirmed it.
+
 Docs worth reading before non-trivial changes: `docs/ARCHITECTURE.md`, `docs/INTEGRATION_RISKS.md`,
 `docs/PRE_TESTNET_RUNBOOK.md`, `docs/LIVE_MATCH_ORCHESTRATION.md`, `docs/UI_LOAN_FLOW_WALKTHROUGH.md`.
